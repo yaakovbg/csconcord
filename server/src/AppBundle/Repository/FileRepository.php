@@ -54,7 +54,7 @@ class FileRepository extends BaseRepository {
         
       
 
-       // $results = $this->findAll();
+         $results = $this->findAll();
         // $articleResult = current($results);
         // $article = $this->deserializeArr($articleResult, Article::class);
         // // cache the result
