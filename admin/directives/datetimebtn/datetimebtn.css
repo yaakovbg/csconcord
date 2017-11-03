@@ -1,0 +1,19 @@
+.absolute .modal-datetimebtn{
+	position: absolute;
+	left:30px;
+}
+.modal-datetimebtn .popover{
+	visibility: visible;
+    display: block;
+    top: 29px;
+    left: -112.5px;
+	width:300px;
+}
+
+.modal-datetimebtn .col{
+	padding: 0;
+}
+
+.popover.bottom>.arrow:after{
+	left: 0px;
+}

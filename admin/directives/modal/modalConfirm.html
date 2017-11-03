@@ -1,0 +1,21 @@
+﻿<span  class="modal-directive modal-confrim">
+	<div class="modal fade in" tabindex="-1" ng-if="modalShow">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">הודעה</h4>
+		  </div>
+		  <div class="modal-body">
+			{{text}}
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" ng-click="close()">לא</button>
+			<button type="button" class="btn btn-primary" ng-click="confirm()">כן</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="modal-backdrop fade in" ng-if="modalShow"></div>
+	<span ng-transclude ng-click="open()"></span>
+</span>

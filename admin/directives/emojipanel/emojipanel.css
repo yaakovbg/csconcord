@@ -1,0 +1,43 @@
+.absolute .modal-emojipanel{
+	position: absolute;
+    right: 62px;
+    margin: 7px;
+}
+
+.pull-left.absolute .modal-emojipanel{
+    right: 1px;
+}
+.modal-emojipanel .popover{
+	visibility: visible;
+    display: block;
+    top: 29px;
+    left: -23.5px;
+	width:500px;
+}
+.modal-emojipanel .popover.bottom>.arrow {
+    left: 17%;
+}
+
+.popover.bottom>.arrow:after{
+	left: 0px;
+}
+
+.modal-emojipanel ul{
+    padding-right: 0;
+	max-height: 130px;
+    overflow-y: scroll;
+}
+
+.modal-emojipanel ul li{
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+	display: inline-block;
+}
+
+.modal-emojipanel .emoji-group-btn{
+    padding: 3px;
+}
+.modal-emojipanel .emoji-add-btn{
+	cursor: pointer;
+}

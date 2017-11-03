@@ -1,0 +1,58 @@
+Array
+(
+    [MIBDIRS] => C:/xampp/php/extras/mibs
+    [MYSQL_HOME] => \xampp\mysql\bin
+    [OPENSSL_CONF] => C:/xampp/apache/bin/openssl.cnf
+    [PHP_PEAR_SYSCONF_DIR] => \xampp\php
+    [PHPRC] => \xampp\php
+    [TMP] => \xampp\tmp
+    [HTTP_HOST] => akamai.local
+    [HTTP_CONNECTION] => keep-alive
+    [CONTENT_LENGTH] => 20
+    [HTTP_POSTMAN_TOKEN] => 463d4c80-a5b4-4e2a-8e06-a0aec7a517e5
+    [HTTP_CACHE_CONTROL] => no-cache
+    [HTTP_ORIGIN] => chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+    [CONTENT_TYPE] => application/json
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate
+    [HTTP_ACCEPT_LANGUAGE] => he-IL,he;q=0.8,en-US;q=0.6,en;q=0.4
+    [PATH] => C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Dell\Dell Data Protection\Access\Advanced\Wave\Gemalto\Access Client\v5\;C:\Program Files (x86)\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files\TortoiseGit\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Skype\Phone\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\bin;C:\Users\Cambium#1\AppData\Roaming\Composer\vendor\bin;C:\Users\Cambium#1\AppData\Roaming\npm
+    [SystemRoot] => C:\Windows
+    [COMSPEC] => C:\Windows\system32\cmd.exe
+    [PATHEXT] => .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+    [WINDIR] => C:\Windows
+    [SERVER_SIGNATURE] => <address>Apache/2.4.23 (Win32) OpenSSL/1.0.2h PHP/7.0.13 Server at akamai.local Port 80</address>
+
+    [SERVER_SOFTWARE] => Apache/2.4.23 (Win32) OpenSSL/1.0.2h PHP/7.0.13
+    [SERVER_NAME] => akamai.local
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => C:/yaakov/rge-master/akamaiuploader-master/akamaiuploader
+    [REQUEST_SCHEME] => http
+    [CONTEXT_PREFIX] => 
+    [CONTEXT_DOCUMENT_ROOT] => C:/yaakov/rge-master/akamaiuploader-master/akamaiuploader
+    [SERVER_ADMIN] => postmaster@localhost
+    [SCRIPT_FILENAME] => C:/yaakov/rge-master/akamaiuploader-master/akamaiuploader/server/callbackurl.php
+    [REMOTE_PORT] => 61223
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /server/callbackurl.php
+    [SCRIPT_NAME] => /server/callbackurl.php
+    [PHP_SELF] => /server/callbackurl.php
+    [REQUEST_TIME_FLOAT] => 1487079670.871
+    [REQUEST_TIME] => 1487079670
+)
+Array
+(
+)
+{
+	
+"test":"test"	
+}<br />
+<b>Notice</b>:  Undefined index: PHP_AUTH_USER in <b>C:\yaakov\rge-master\akamaiuploader-master\akamaiuploader\server\callbackurl.php</b> on line <b>12</b><br />
+<br />
+<b>Notice</b>:  Undefined index: PHP_AUTH_PW in <b>C:\yaakov\rge-master\akamaiuploader-master\akamaiuploader\server\callbackurl.php</b> on line <b>13</b><br />

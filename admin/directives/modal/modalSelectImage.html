@@ -1,0 +1,46 @@
+﻿<span class="modal-directive modal-select-image">
+	<div class="modal fade in" tabindex="-1" ng-if="modalShow">
+	  <div class="modal-dialog modal-lg">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">בחירת תמונה</h4>
+		  </div>
+		  <div class="modal-body">
+			<button type="button" class="btn btn-primary" ng-repeat="group in gallery" ng-click="setSelectGroup($index)" ng-class="{'btn-outline':selectGroup!=$index}">{{group.name}}</button>
+			<button type="button" class="btn btn-primary btn-outline" ng-click="addGroup()">+</button>
+		  	<br /><br />
+            <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="שם תקייה" ng-model="gallery[selectGroup].name">
+                <span class="input-group-btn">
+					<button class="btn btn-default" type="button" ng-click="saveGroupName()">
+						שמור שם קבוצה
+					</button>
+				</span>
+            </div>
+			<br /><br />
+
+			<div class="row">
+				<div class="col-xs-6 ">
+					<span class="btn btn-info btn-file">
+						העלה תמונה <input type="file" accept="image/*" ngf-select="onFileSelect($files)">
+					</span>
+				</div>
+			</div>
+			<br />			
+			<div class="row">
+				<div class="col-lg-3 col-md-4 col-xs-6 thumb gallery-img" ng-repeat="img in gallery[selectGroup].list | reverse" >
+					<img class="thumbnail img-responsive center-block" ng-src="/{{img}}" ng-class="{select:$index==selectIndex}" ng-click="select($index)" ng-dblclick="select($index);confirm();">
+				</div>
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-warning" ng-click="close()">ביטול</button>
+			<button type="button" class="btn btn-success" ng-click="confirm()">אישור</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="modal-backdrop fade in" ng-if="modalShow"></div>
+	<span ng-transclude ng-click="open()" style="cursor: pointer;"></span>
+</span>

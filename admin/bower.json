@@ -1,0 +1,20 @@
+{
+  "name": "hatziltzul admin",
+  "version": "0.0.0",
+  "authors": [
+    "daniel levanon <ldaniel@cambium.co.il>"
+  ],
+  "ignore": [
+  ],
+  "dependencies": {
+    "angular": "1.4.7",
+    "bootstrap": "3.3.5",
+    "angular-bootstrap": "*",
+	"angular-ui-router": "0.2.15",
+	"startbootstrap-sb-admin-2": "1.0.7",
+	"ng-file-upload": "*",
+	"angular-ui-sortable": "*",
+	"angular-emoji-filter": "*",
+	"angular-sanitize":"1.4.7"
+	}
+}

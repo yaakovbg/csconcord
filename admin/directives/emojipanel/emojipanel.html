@@ -1,0 +1,21 @@
+﻿<span  class="modal-emojipanel">
+	<button type="button" ng-click="showModal=!showModal" class="btn btn-circle btn-success"><i class="fa fa-smile-o"></i>
+	</button>
+	<div ng-if="showModal" class="bottom fade popover in">
+		<div class="arrow"></div>
+		<div class="popover-inner">
+			<div class="popover-content">
+				<div ng-bind-html="ngModel | emoji"></div>
+				<br>
+				<button type="button" class="btn btn-primary emoji-group-btn" ng-click="selectGroup='people'" ng-class="{'btn-outline':selectGroup!='people'}" ng-bind-html="':'+emojiList.people[0]+':' | emoji"></button>
+				<button type="button" class="btn btn-primary emoji-group-btn" ng-click="selectGroup='nature'" ng-class="{'btn-outline':selectGroup!='nature'}" ng-bind-html="':'+emojiList.nature[0]+':' | emoji"></button>
+				<button type="button" class="btn btn-primary emoji-group-btn" ng-click="selectGroup='objects'" ng-class="{'btn-outline':selectGroup!='objects'}" ng-bind-html="':'+emojiList.objects[0]+':' | emoji"></button>
+				<button type="button" class="btn btn-primary emoji-group-btn" ng-click="selectGroup='places'" ng-class="{'btn-outline':selectGroup!='places'}" ng-bind-html="':'+emojiList.places[0]+':' | emoji"></button>
+				<button type="button" class="btn btn-primary emoji-group-btn" ng-click="selectGroup='symbols'" ng-class="{'btn-outline':selectGroup!='symbols'}" ng-bind-html="':'+emojiList.symbols[0]+':' | emoji"></button>
+				<ul>
+					<li ng-repeat="item in emojiList[selectGroup]" class="emoji-add-btn" ng-click="addEmoji(item)" ng-bind-html="':'+item+':' | emoji"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</span>	
