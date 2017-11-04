@@ -13,14 +13,39 @@ use AppBundle\Entity\File;
 use AppBundle\Entity\Article;
 use AppBundle\Services\Entity\Article\ArticleGroup;
 
-class FileRepository extends BaseRepository {
+class ArticleRepository extends BaseRepository {
     public static $articleCache = array();
 
+     /**
+     * @param $fileId
+     * @return File
+     */
+    public function saveArticle(Article $article) {
+     $arr = $this->serializeArr($article);
+    // $q = $this->_em->getConnection()->createQueryBuilder();
+     //$values = array('title'=>':title','topic'=>'topic','filepath'=>'filepath');
+//      $q
+//            ->insert("`article`")
+//            ->values($values)
+//        ;
+      $res=$this->smartQuery(array(
+          'sql' => "insert into `article`(title,topic,filepath) values (:title,:topic,:filepath)",
+                    'par' => array('title'=>$article->getTitle(),'topic'=>$article->getTopic(),'filepath'=>$article->getFilepath()),
+                    'ret' => 'result'
+      ));
+     //$stmt=$this->executeStmt($q->getSQL() , $arr);
+    
+
+return $res;
+    }
+    
+    
     /**
      * @param $fileId
      * @return File
      */
     public function getArticleById($fileId) {
+       
 //        if(isset(self::$articleCache[$fileId])) {
 //            return self::$articleCache[$fileId];
 //        }

@@ -40,7 +40,9 @@ admin.directive('modalFileuploader', ['$rootScope','Upload', function ($rootScop
 				
 				scope.orginalModel=scope.ngModel;
 				scope.close();
-				if(attrs.onConfirm){
+                                console.log(scope.ngModel);
+                                console.log(scope.onConfirm);
+				if(scope.onConfirm){
 					scope.onConfirm();
 				}
 
@@ -54,9 +56,9 @@ admin.directive('modalFileuploader', ['$rootScope','Upload', function ($rootScop
 						file: $file,
 						progress: function(e){}
 					}).then(function(data, status, headers, config) {
-						// file is uploaded successfully
-//						if (data.data.fileUrl)
-//							scope.updategGllery();
+						
+						if (data.data.filename)
+							scope.ngModel.filepath=data.data.filename;
 //						else if (data.data.error)
 //							alert(data.data.error);
 //						else
