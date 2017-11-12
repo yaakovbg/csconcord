@@ -11,6 +11,12 @@ use JMS\Serializer\SerializerBuilder;
 
 class BaseRepository extends EntityRepository
 {
+    protected $q;
+    public function __construct($em, \Doctrine\ORM\Mapping\ClassMetadata $class) {
+        parent::__construct($em, $class);
+        $this->q=$this->_em->getConnection()->createQueryBuilder();
+    }
+
     protected function fetchAssoc($sql, $args = array(), $default = FALSE) {
         $stmt = $this->_em->getConnection()->prepare($sql);
         $stmt->execute($args);
@@ -39,6 +45,19 @@ class BaseRepository extends EntityRepository
     protected function serializeArr($obj) {
         $serializer = SerializerBuilder::create()->build();
         $res = $serializer->toArray($obj);
+        return $res;
+    }
+     /**
+     * @param $obj
+     * @return mixed
+     */
+    protected function serializeArrParams($obj) {
+        $serializer = SerializerBuilder::create()->build();
+        $arr = $serializer->toArray($obj);
+        $res=array();
+        foreach ($arr as $k=>$v){
+            $res[':'.$k]=$v;
+        }        
         return $res;
     }
     /**

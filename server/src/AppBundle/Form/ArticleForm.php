@@ -19,6 +19,8 @@ class ArticleForm extends AbstractType
                         new NotBlank(),
                     ),))
                 ->add('topic')
+                ->add('id')
+                 ->add('description')
                 ->add('filepath')
         ;
     }

@@ -50,29 +50,38 @@ class Article
     private $id;
     
    
-    public function getName(){
-        return $this->name;
+        public function getId(){
+        return $this->id;
     }
-/**
-     * Sets file.
+    public function __construct() {
+        $this->description='';
+        $this->title='';
+        $this->topic='';
+        $this->filepath='';
+    }
+
+    /**
+     * Sets id.
      *
-     * @param UploadedFile $file
+     * @param string $title
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
+        $this->id = $id;
     }
     public function getTitle(){
         return $this->title;
     }
-/**
-     * Sets file.
-     *
-     * @param string $title
-     */
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+    public function getDescription(){
+        return $this->description;
+    }
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
     public function getTopic(){
         return $this->topic;
@@ -98,7 +107,14 @@ class Article
     {
         $this->filepath = $filepath;
     }
-
+    public function serilize(){
+        $arr=array();
+        foreach($this as $k=>$v){
+            $arr[$k]=$v;
+        }
+        return $arr;
+    }
+    
 
 }
 

@@ -17,6 +17,7 @@ use AppBundle\Entity\Article;
 use AppBundle\Repository\ArticleRepository;
 use AppBundle\Form\ArticleForm;
 use AppBundle\Service\FileUploader;
+use AppBundle\Service\FileAnalyzer;
 
 
 class ArticleController extends FOSRestController
@@ -28,6 +29,31 @@ class ArticleController extends FOSRestController
     {
         $filerepo = $this->getDoctrine()->getRepository(Article::class);
         $restresult=$filerepo->test();
+
+        return $restresult;
+    }
+    /**
+     * @Rest\Get("/articles")
+     */
+    public function getArticles()
+    {
+        $filerepo = $this->getDoctrine()->getRepository(Article::class);
+        $restresult=$filerepo->findAll();
+
+        return $restresult;
+    }
+     /**
+     * @Rest\Delete("/article")
+     */
+    public function deleteArticle(Request $request)
+    {
+        $data = json_decode($request->getContent(), false);
+        $articlerepo = $this->getDoctrine()->getRepository(Article::class);
+        if(isset($data->id))
+             $restresult=$articlerepo->deleteArticleById($data->id);
+         else {
+             $restresult=array('error'=>'missing id');
+         }
 
         return $restresult;
     }
@@ -47,19 +73,10 @@ class ArticleController extends FOSRestController
      */
     public function saveArticle(Request $request)
     {
-
-       $data = json_decode($request->getContent(), true);
-       $article=new Article;
-//        $form = $this->createFormBuilder($article,array( 'csrf_protection' => false))
-//                ->add('title', TextType::class, array(
-//                    'constraints' => array(
-//                        new NotBlank(),
-//                    ),))
-//                ->add('topic')
-//                ->add('filepath')
-//                ->getForm();
+        $data = json_decode($request->getContent(), true);
+        $article=new Article;
         $form = $this->createForm(ArticleForm::class, $article);
-         $form->submit($data);
+        $form->submit($data);
         $d= $form->getData();
         $res='';
         $valid=$form->isValid();
@@ -68,12 +85,25 @@ class ArticleController extends FOSRestController
              $res=$filerepo->saveArticle($d);
         }
        $err=$form->getErrors(true, false);
-       //print_r($err);
-     //  print_r($d);
-     //  print_r($data);
-       
+
         return array('data'=>$res,'err'=>$err);
-    
-   
+    }
+        /**
+     * @Rest\Post("/testanalyze")
+     */
+    public function testAnalyze(Request $request)
+    {
+        $data = json_decode($request->getContent());
+        $id=(isset($data->id))?$data->id:'';
+        $articlerepo = $this->getDoctrine()->getRepository(Article::class);
+        $article=$articlerepo->getArticleById($id);
+        $filesDir=$this->container->getParameter('files_directory');   
+       $filepath=$filesDir.'/'.$article->getFilepath();
+        
+// $fullFilePath=$filesDir.'/'.$article->getFilepath();
+       // print_r();
+        $analyzer= new FileAnalyzer($filepath);
+        
+        return array('id'=>$id,'article'=>$article);
     }
 }

@@ -22,53 +22,53 @@ class ArticleRepository extends BaseRepository {
      */
     public function saveArticle(Article $article) {
      $arr = $this->serializeArr($article);
-    // $q = $this->_em->getConnection()->createQueryBuilder();
-     //$values = array('title'=>':title','topic'=>'topic','filepath'=>'filepath');
-//      $q
-//            ->insert("`article`")
-//            ->values($values)
-//        ;
+     $arrParams=$this->serializeArrParams($article);
+
+     if(isset($arr['id'])){//update
+         
+        $q = $this->_em->getConnection()->createQueryBuilder();
+        $q->update('article');
+        foreach($arr as $k=>$v){
+            if($k!='id')
+                $q->set($k, ':'.$k);
+        }
+        
+        $q->where('id=:id');
+        $q->setParameters($arrParams);
+       $res= $q->execute();
+
+     }
+     else//new insert
       $res=$this->smartQuery(array(
           'sql' => "insert into `article`(title,topic,filepath) values (:title,:topic,:filepath)",
-                    'par' => array('title'=>$article->getTitle(),'topic'=>$article->getTopic(),'filepath'=>$article->getFilepath()),
+                    'par' => $arr,
                     'ret' => 'result'
       ));
-     //$stmt=$this->executeStmt($q->getSQL() , $arr);
+    
     
 
 return $res;
     }
     
-    
-    /**
-     * @param $fileId
+     /**
+     * @param $articleId
      * @return File
      */
-    public function getArticleById($fileId) {
+    public function deleteArticleById($articleId) {
+       $q = $this->_em->getConnection()->createQueryBuilder();
+       $q->delete('article')->where('article.id=:aid')->setParameter('aid', $articleId);
+      $res= $q->execute();
+      // $q->get
+        return $res;
+    }
+    /**
+     * @param $articleId
+     * @return Article
+     */
+    public function getArticleById($articleId) {
        
-//        if(isset(self::$articleCache[$fileId])) {
-//            return self::$articleCache[$fileId];
-//        }
-//        //$article = $this->findOneBy(array('articleid' => $articleId));
-//        $sql = "
-//            SELECT 
-//                *
-//            FROM
-//                `file`
-//            WHERE
-//                `fid` = :fileId
-//            LIMIT 1
-//        ";
-//        $results = $this->fetchAssoc($sql, array(":fileId" => $fileId));
-//        if(count($results) === 0) {
-//            return NULL;
-//        }
-//        $articleResult = current($results);
-//        $article = $this->deserializeArr($articleResult, File::class);
-//        // cache the result
-//        self::$articleCache[$articleId] = $article;
-       // return self::$articleCache[$articleId];
-        return 'test';
+        $articleResult = $this->findOneBy(array('id' => $articleId));
+        return $articleResult;
     }
      /**
      * 
