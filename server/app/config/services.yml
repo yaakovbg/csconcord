@@ -34,8 +34,14 @@ services:
             $targetDir: '%files_directory%'
             
     AppBundle\Service\FileAnalyzer:
-         arguments:
-            $targetDir: '%files_directory%'
+        public: true
+        shared: false
+        arguments:
+            ['@service_container']
+            
+   
+            
+
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

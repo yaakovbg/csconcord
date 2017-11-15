@@ -5,7 +5,7 @@ use \Symfony\Component\DependencyInjection\ContainerAware;
 use \stdClass;
 
 class FileAnalyzer
-{
+{     
     private $container;
     private $filePath;
     private $originalContent;
@@ -15,9 +15,9 @@ class FileAnalyzer
     private $wordsData;
     private $wordMap;
     
-    public function __construct($targetDir)
+    public function __construct($container)
     {
-        //$this->container=$container;
+        $this->container=$container;
     }
     public function analyze($filePath)
     {
