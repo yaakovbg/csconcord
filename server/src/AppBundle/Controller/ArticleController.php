@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\ArticleWord;
 use AppBundle\Repository\ArticleRepository;
 use AppBundle\Form\ArticleForm;
 use AppBundle\Service\FileUploader;
@@ -94,16 +95,18 @@ class ArticleController extends FOSRestController
     public function testAnalyze(Request $request)
     {
         $data = json_decode($request->getContent());
+        $analyze=$this->container->get(FileAnalyzer::class);
         $id=(isset($data->id))?$data->id:'';
         $articlerepo = $this->getDoctrine()->getRepository(Article::class);
         $article=$articlerepo->getArticleById($id);
-        $filesDir=$this->container->getParameter('files_directory');   
-       $filepath=$filesDir.'/'.$article->getFilepath();
-        
-// $fullFilePath=$filesDir.'/'.$article->getFilepath();
-       // print_r();
-        $analyzer= new FileAnalyzer($filepath);
-        
+//        $filesDir=$this->container->getParameter('files_directory');   
+//        $filepath=$filesDir.'/'.$article->getFilepath();
+//        
+//// $fullFilePath=$filesDir.'/'.$article->getFilepath();
+//       // print_r();
+//        $analyzer= new FileAnalyzer($filepath);
+//        $repo = $this->getDoctrine()->getRepository(ArticleWord::class);
+//        $repo->saveArticleWords($analyzer->getWordsData(),$id);
         return array('id'=>$id,'article'=>$article);
     }
 }

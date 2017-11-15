@@ -52,7 +52,7 @@ return $res;
     
      /**
      * @param $articleId
-     * @return File
+     * @return Boolean
      */
     public function deleteArticleById($articleId) {
        $q = $this->_em->getConnection()->createQueryBuilder();

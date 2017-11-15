@@ -81,7 +81,7 @@ class BaseRepository extends EntityRepository
         }
         return $results;
     }
-	public function smartQuery($array)
+    public function smartQuery($array)
     {
         # Managing passed vars
         $sql = $array['sql'];
@@ -93,6 +93,7 @@ class BaseRepository extends EntityRepository
 	
 		foreach($par as $key=>&$value){		
 			switch (gettype($value)){
+                                
 				case "integer":
 					$obj->bindParam($key, $value, \PDO::PARAM_INT);
 					break;

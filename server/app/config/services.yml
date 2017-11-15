@@ -32,6 +32,10 @@ services:
     AppBundle\Service\FileUploader:
         arguments:
             $targetDir: '%files_directory%'
+            
+    AppBundle\Service\FileAnalyzer:
+         arguments:
+            $targetDir: '%files_directory%'
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:
