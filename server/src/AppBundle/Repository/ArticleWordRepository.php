@@ -20,41 +20,35 @@ class ArticleWordRepository extends BaseRepository {
      * @param $articlewords
      * @return Boolen
      */
-    public function saveArticleWords($articlewords,$articleid) {
-        $arr=array();
-        foreach($articlewords as $k=>$v){
-            $line=array($articleid,$v->word,$v->pos,$v->context);
-            $arr[]=$line;
-        }
-    // print_r($arr);
-//     $arrParams=$this->serializeArrParams($article);
-//
-//     if(isset($arr['id'])){//update
-//         
-//        $q = $this->_em->getConnection()->createQueryBuilder();
-//        $q->update('articleword');
-//        foreach($arr as $k=>$v){
-//            if($k!='id')
-//                $q->set($k, ':'.$k);
-//        }
-//        
-//        $q->where('id=:id');
-//        $q->setParameters($arrParams);
-//       $res= $q->execute();
-//
-//     }
-//     else//new insert
-    // print_r(gettype($arr));
-     print_r(implode(',',$arr));
-//      $res=$this->smartQuery(array(
-//          'sql' => "insert into `articleword`(articleid,word,position,context) values :vals",
-//                    'par' => array('vals'=>$arr),
-//                    'ret' => 'result'
-//      ));
-    
-    
+    public function saveArticleWords($articlewords) {
+            $dataVals=$this->serializeArr($articlewords);
+          
+        $dataToInsert = array();
+        $colNames=array('position','articleid','word','context');
+        foreach ($dataVals as $row => $data) {
+            foreach($data as $val) {
+                $dataToInsert[] = $val;
+            }
+        } 
+        $updateCols = array();
 
-return $res;
+        foreach ($colNames as $curCol) {
+            $updateCols[] = $curCol . " = VALUES($curCol)";
+        }
+
+        $onDup = implode(', ', $updateCols);
+        // setup the placeholders - a fancy way to make the long "(?, ?, ?)..." string
+        $rowPlaces = '(' . implode(', ', array_fill(0, count($colNames), '?')) . ')';
+        $allPlaces = implode(', ', array_fill(0, count($dataVals), $rowPlaces));
+        $sql = "INSERT INTO `articleword` (" . implode(', ', $colNames) . 
+        ") VALUES " . $allPlaces . " ON DUPLICATE KEY UPDATE $onDup";
+
+
+         
+       $res=$this->executeStmt($sql,$dataToInsert);
+       
+
+    return $res;
     }
     
    

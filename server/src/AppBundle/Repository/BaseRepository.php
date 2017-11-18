@@ -25,8 +25,8 @@ class BaseRepository extends EntityRepository
     }
     protected function executeStmt($sql, $args = array()) {
         $stmt = $this->_em->getConnection()->prepare($sql);
-        $stmt->execute($args);
-        return $stmt;
+        $res=$stmt->execute($args);
+        return $res;
     }
     /**
      * @param $arrResult

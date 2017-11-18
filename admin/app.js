@@ -33,6 +33,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
 		        }
 		    }
 		})
+		.state("search", {
+		    url: "/search",
+		    views: {
+		        "main": {
+		            templateUrl: "components/search/search.html",
+		            controller: "search"
+		        }
+		    }
+		})
         .state("fileUploader", {
             url: "/fileUploader",
             views: {

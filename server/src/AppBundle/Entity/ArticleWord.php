@@ -13,6 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ArticleWord
 {
+    public function __construct($args=''){
+        if(gettype($args)=='object'){
+            foreach($this as $k=>$v){
+                if(isset($args->$k))
+                    $this->$k=$args->$k;
+            }
+        }else{
+            $this->word='';
+        }
+            
+    }
+
     /**
      * @var integer
      *
@@ -46,10 +58,7 @@ class ArticleWord
      */
     private $context;
     
-     public function __construct() {
-        $this->word='';
-       
-    }
+
    
     public function getId(){
         return $this->id;

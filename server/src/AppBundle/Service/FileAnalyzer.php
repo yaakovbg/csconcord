@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Service;
 
+use \AppBundle\Entity\Article;
+use \AppBundle\Entity\ArticleWord;
 use \Symfony\Component\DependencyInjection\ContainerAware;
 use \stdClass;
 
@@ -8,6 +10,7 @@ class FileAnalyzer
 {     
     private $container;
     private $filePath;
+    private $articleId;
     private $originalContent;
     private $manipulatedContent;
     private $numOfWords;
@@ -19,9 +22,14 @@ class FileAnalyzer
     {
         $this->container=$container;
     }
-    public function analyze($filePath)
+    public function analyze($articleId)
     {
-        $this->filePath = $filePath;
+        $this->articleId=$articleId;
+        $articlerepo= $this->container->get('doctrine')->getRepository(Article::class);
+        $article=$articlerepo->getArticleById($articleId);
+        $filesDir=$this->container->getParameter('files_directory');  
+       
+        $this->filePath=$filesDir.'/'.$article->getFilepath();
        
         $this->originalContent = file_get_contents($this->filePath);
        
@@ -29,9 +37,9 @@ class FileAnalyzer
         $this->words=explode(" ",$this->manipulatedContent);
         $this->wordMap=new stdClass();
         $this->wordsData=array();
-       // print_r($this->words);
         $this->mapWords();
-        //print_r($this->wordsData);
+        return $this->save();
+        
     }
     private function mapWords(){
         foreach( $this->words as $k=>$word){
@@ -60,9 +68,14 @@ class FileAnalyzer
                 if(150<strlen($wordContext))
                     $wordContext=mb_substr($wordContext,0,150);
                 $wordContext = str_replace($k, '<b>'.$k.'</b>', $wordContext);
-                $this->wordsData[]=(object)array('word'=>$k,'pos'=>$newpos,'context'=>$wordContext);
+                $artilceWord=new ArticleWord((object)array('word'=>$k,'position'=>$newpos,'context'=>$wordContext,'articleid'=> $this->articleId));
+                $this->wordsData[]=$artilceWord;
             }
         }
+    }
+    function save(){
+        $articleWordrepo= $this->container->get('doctrine')->getRepository(ArticleWord::class);
+        return $articleWordrepo->saveArticleWords($this->wordsData);
     }
     function getWordsData(){
         return $this->wordsData;

@@ -95,18 +95,21 @@ class ArticleController extends FOSRestController
     public function testAnalyze(Request $request)
     {
         $data = json_decode($request->getContent());
-        $analyze=$this->container->get(FileAnalyzer::class);
-        $id=(isset($data->id))?$data->id:'';
-        $articlerepo = $this->getDoctrine()->getRepository(Article::class);
-        $article=$articlerepo->getArticleById($id);
-//        $filesDir=$this->container->getParameter('files_directory');   
-//        $filepath=$filesDir.'/'.$article->getFilepath();
-//        
-//// $fullFilePath=$filesDir.'/'.$article->getFilepath();
-//       // print_r();
-//        $analyzer= new FileAnalyzer($filepath);
-//        $repo = $this->getDoctrine()->getRepository(ArticleWord::class);
-//        $repo->saveArticleWords($analyzer->getWordsData(),$id);
-        return array('id'=>$id,'article'=>$article);
+        $analyzer=$this->container->get(FileAnalyzer::class);
+        $articleId=(isset($data->id))?$data->id:'';
+
+        $res=$analyzer->analyze($articleId);
+        return array('id'=>$articleId,'res'=>$res);
+    }
+        /**
+     * @Rest\Post("/articlewords")
+     */
+    public function getArticleWords(Request $request)
+    {
+        $data = json_decode($request->getContent());
+        $filerepo = $this->getDoctrine()->getRepository(ArticleWord::class);
+       
+       
+        return $filerepo->findAll();
     }
 }

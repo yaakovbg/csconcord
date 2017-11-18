@@ -23,7 +23,6 @@ class ArticleRepository extends BaseRepository {
     public function saveArticle(Article $article) {
      $arr = $this->serializeArr($article);
      $arrParams=$this->serializeArrParams($article);
-
      if(isset($arr['id'])){//update
          
         $q = $this->_em->getConnection()->createQueryBuilder();
