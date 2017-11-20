@@ -1,7 +1,7 @@
 <?php
 
 namespace AppBundle\Controller;
- 
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -20,96 +20,109 @@ use AppBundle\Form\ArticleForm;
 use AppBundle\Service\FileUploader;
 use AppBundle\Service\FileAnalyzer;
 
+class ArticleController extends FOSRestController {
 
-class ArticleController extends FOSRestController
-{
-	/**
+    /**
      * @Rest\Get("/file")
      */
-    public function getAction()
-    {
+    public function getAction() {
         $filerepo = $this->getDoctrine()->getRepository(Article::class);
-        $restresult=$filerepo->test();
+        $restresult = $filerepo->test();
 
         return $restresult;
     }
+
+    /**
+     * @Rest\Get("/article/{id}")
+     */
+    public function getArticle($id) {
+        $articlerepo = $this->getDoctrine()->getRepository(Article::class);
+        $article =  $articlerepo->getArticleById($id);
+        $filesDir = $this->container->getParameter('files_directory');
+        $fileFullPath = $filesDir . '/' . $article->getFilepath();
+        $filecontent = file_get_contents($fileFullPath);
+       // $restresult->fileContent = $filecontent;
+        return array('fileContent'=>$filecontent,'id'=>$article->getId(),'title'=>$article->getTitle());
+    }
+
     /**
      * @Rest\Get("/articles")
      */
-    public function getArticles()
-    {
+    public function getArticles() {
         $filerepo = $this->getDoctrine()->getRepository(Article::class);
-        $restresult=$filerepo->findAll();
+        $restresult = $filerepo->findAll();
 
         return $restresult;
     }
-     /**
+
+    /**
      * @Rest\Delete("/article")
      */
-    public function deleteArticle(Request $request)
-    {
+    public function deleteArticle(Request $request) {
         $data = json_decode($request->getContent(), false);
         $articlerepo = $this->getDoctrine()->getRepository(Article::class);
-        if(isset($data->id))
-             $restresult=$articlerepo->deleteArticleById($data->id);
-         else {
-             $restresult=array('error'=>'missing id');
-         }
+        if (isset($data->id))
+            $restresult = $articlerepo->deleteArticleById($data->id);
+        else {
+            $restresult = array('error' => 'missing id');
+        }
 
         return $restresult;
     }
+
     /**
      * @Rest\Post("/file")
      */
-    public function postAction(Request $req, FileUploader $fileUploader)
-    {
-       // print_r($req);
-       $file=$req->files->get('file');
-      
-       $res=$fileUploader->upload($file);
-        return array('filename'=>$res);
+    public function postAction(Request $req, FileUploader $fileUploader) {
+        // print_r($req);
+        $file = $req->files->get('file');
+
+        $res = $fileUploader->upload($file);
+        return array('filename' => $res);
     }
+
     /**
      * @Rest\Post("/article")
      */
-    public function saveArticle(Request $request)
-    {
+    public function saveArticle(Request $request) {
         $data = json_decode($request->getContent(), true);
-        $article=new Article;
+        $article = new Article;
         $form = $this->createForm(ArticleForm::class, $article);
         $form->submit($data);
-        $d= $form->getData();
-        $res='';
-        $valid=$form->isValid();
-        if($valid){
-             $filerepo = $this->getDoctrine()->getRepository(Article::class);
-             $res=$filerepo->saveArticle($d);
+        $d = $form->getData();
+        $res = '';
+        $valid = $form->isValid();
+        if ($valid) {
+            $filerepo = $this->getDoctrine()->getRepository(Article::class);
+            $res = $filerepo->saveArticle($d);
         }
-       $err=$form->getErrors(true, false);
+        $err = $form->getErrors(true, false);
 
-        return array('data'=>$res,'err'=>$err);
+        return array('data' => $res, 'err' => $err);
     }
-        /**
+
+    /**
      * @Rest\Post("/testanalyze")
      */
-    public function testAnalyze(Request $request)
-    {
+    public function testAnalyze(Request $request) {
         $data = json_decode($request->getContent());
-        $analyzer=$this->container->get(FileAnalyzer::class);
-        $articleId=(isset($data->id))?$data->id:'';
+        $analyzer = $this->container->get(FileAnalyzer::class);
+        $articleId = (isset($data->id)) ? $data->id : '';
 
-        $res=$analyzer->analyze($articleId);
-        return array('id'=>$articleId,'res'=>$res);
+        $res = $analyzer->analyze($articleId);
+        return array('id' => $articleId, 'res' => $res);
     }
-        /**
+
+    /**
      * @Rest\Post("/articlewords")
      */
-    public function getArticleWords(Request $request)
-    {
+    public function getArticleWords(Request $request) {
         $data = json_decode($request->getContent());
-        $filerepo = $this->getDoctrine()->getRepository(ArticleWord::class);
-       
-       
-        return $filerepo->findAll();
+        $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
+        $res = $articleWordrepo->getArticleWords($data);
+
+        return $res;
+        //return $filerepo->findAll();
     }
+
 }

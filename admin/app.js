@@ -51,6 +51,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 }
             }
         })
+        .state("article", {
+            url: "/article/:aid?search",
+            views: {
+                "main": {
+                    templateUrl: "components/article/article.html",
+                    controller: "article"
+                }
+            }
+        })
 	
 	var counter=0;
 	$httpProvider.interceptors.push(function($document,$rootScope) {
