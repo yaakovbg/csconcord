@@ -60,6 +60,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 }
             }
         })
+        .state("wordGroup", {
+            url: "/wordGroup",
+            views: {
+                "main": {
+                    templateUrl: "components/wordGroup/wordGroup.html",
+                    controller: "wordGroup"
+                }
+            }
+        })
 	
 	var counter=0;
 	$httpProvider.interceptors.push(function($document,$rootScope) {

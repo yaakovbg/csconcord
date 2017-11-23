@@ -1,0 +1,70 @@
+<div id="wrapper">
+    <header></header>
+
+    <div id="page-wrapper">
+            <div class="row">
+                    <h1 class="page-header">קבוצות</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                        <div class="panel panel-default">
+                                <div class="panel-heading">
+                                       קבוצות
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div class="panel-body">
+                                  <span id="test"></span>
+                                        <span modal-wordgroup on-confirm="addWordGroup(newWordGroup)" ng-model="newWordGroup" >
+                                                <button class="btn btn-info" type="button">
+                                                        הוספת קובץ
+                                                </button>
+                                        </span>
+                                        <br>
+                                        <div class="table-responsive" style="margin-top:15px">
+                                                <table class="table table-striped table-bordered table-hover midrows">
+                                                        <thead>
+                                                                <tr>
+                                                                        <th>#</th>
+                                                                        <th>כותרת</th>
+                                                                        <th>נושא</th>
+                                                                        
+                                                                        <th></th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody ng-model="wordGroups">
+                                                                <tr ng-repeat="wordGroup in wordGroups">
+                                                                        <td>{{$index+1}}</td>
+                                                                        <td>{{wordGroup.title}}</td>
+                                                                        <td>{{wordGroup.topic}}</td>
+                                                                       
+                                                                        <td>
+                                                                            <span modal-wordgroup on-confirm="editWordGroup(wordGroup)" ng-model="wordGroup" >
+                                                                               <button class="btn btn-info" type="button">
+                                                                                       <i class="fa fa-edit"></i>
+                                                                               </button>
+                                                                           </span>
+
+                                                                           <span modal-confirm on-confirm="removeWordGroup(wordGroup)" text="האם אתה בטוח שברצונך למחוק" >
+                                                                               <button class="btn btn-danger" type="button">
+                                                                                       <i class="fa fa-trash-o"></i>
+                                                                               </button>
+                                                                           </span>
+                                                                        </td>
+                                                                </tr>
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                        <!-- /.table-responsive -->
+
+                                </div>
+                                <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+        </div>
+
+    </div>
+
+</div>

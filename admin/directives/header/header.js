@@ -4,9 +4,7 @@ admin.directive('header', ['$state', '$stateParams', '$rootScope', '$http','user
         templateUrl: './directives/header/header.html',
 		link: function (scope, el, attrs) {
 			scope.state=$state.current.name;
-			
 
-           
         },
         replace: true
     };
