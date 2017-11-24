@@ -12,40 +12,16 @@ namespace AppBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use JMS\Serializer\SerializerBuilder;
 use AppBundle\Entity\File;
-use AppBundle\Entity\ArticleWord;
+use AppBundle\Entity\ArticleWordGroup;
 
-class ArticleWordRepository extends BaseRepository {
+class WordGroupRepository extends BaseRepository {
 
     /**
-     * @param $articlewords
+     * @param WordGroup $wordGroup
      * @return Boolen
      */
-    public function saveArticleWords($articlewords) {
-        $dataVals = $this->serializeArr($articlewords);
-
-        $dataToInsert = array();
-        $colNames = array('position', 'articleid', 'word', 'context');
-        foreach ($dataVals as $row => $data) {
-            foreach ($data as $val) {
-                $dataToInsert[] = $val;
-            }
-        }
-        $updateCols = array();
-
-        foreach ($colNames as $curCol) {
-            $updateCols[] = $curCol . " = VALUES($curCol)";
-        }
-
-        $onDup = implode(', ', $updateCols);
-        // setup the placeholders - a fancy way to make the long "(?, ?, ?)..." string
-        $rowPlaces = '(' . implode(', ', array_fill(0, count($colNames), '?')) . ')';
-        $allPlaces = implode(', ', array_fill(0, count($dataVals), $rowPlaces));
-        $sql = "INSERT INTO `articleword` (" . implode(', ', $colNames) .
-                ") VALUES " . $allPlaces . " ON DUPLICATE KEY UPDATE $onDup";
-
-
-
-        $res = $this->executeStmt($sql, $dataToInsert);
+    public function save($wordGroup) {
+       $res='';
 
 
         return $res;
@@ -58,15 +34,15 @@ class ArticleWordRepository extends BaseRepository {
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $where = '';
         $limit = '';
-        
         if ($search !== false) {
-            $paramArr['search'] = "%$search%";
-            $where = "where word like :search";  
+            $where = "where word like '%:search%'";
+            $paramArr['search'] = $search;
         }
         if ($page !== false && $numperpage !== false) {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
-        }       
+        }
+        
         $res = $this->smartQuery(array(
             'sql' => "select * from `articleword` $where $limit",
             'par' => $paramArr,

@@ -67,7 +67,7 @@ admin.directive('modalFileuploader', ['$rootScope', 'Upload', function ($rootSco
             },
         };
     }]);
-admin.directive('modalWordgroup', ['$rootScope', function ($rootScope) {
+admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootScope,$http,$q) {
         return {
             restrict: 'A',
             templateUrl: './directives/modal/modalWordgroup.html',
@@ -77,12 +77,34 @@ admin.directive('modalWordgroup', ['$rootScope', function ($rootScope) {
                 ngModel: '='
             },
             link: function (scope, elem, attrs) {
+                var canceller = $q.defer();
                 scope.modalShow = false;
                 scope.hasError = false;
                 scope.modalLoad = false;
                 scope.orginalModel = angular.copy(scope.ngModel);
+                scope.words=[];
+                
                 scope.data = {};
+               
+                scope.params = {page: 1, numPerPage: 10, order: {}, search: ''};
+                scope.getWords=function(){
+                    canceller.resolve();
+                    canceller = $q.defer();
+                    $http({method: 'POST', url: '../server/articlewords', data: scope.params, timeout: canceller.promise}).
+                    success(function (data, status, headers, config) {
+                        scope.words = data;
+                    });
+                }
+                 scope.$watch('params', function () {
+                        scope.getWords();
+                    }, true)
+                scope.init=function(){
+                    
+                    scope.params.search='';
+                    scope.getWords();
+                }
                 scope.open = function () {
+                    scope.init();
                     scope.orginalModel = angular.copy(scope.ngModel);
                     // alert('modal.js, corOrder: open');
                     var body = document.getElementsByTagName("body")[0];
