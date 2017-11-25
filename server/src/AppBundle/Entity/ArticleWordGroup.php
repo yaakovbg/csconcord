@@ -34,7 +34,13 @@ class ArticleWordGroup
      * @ORM\Column(name="word", type="string", length=256, nullable=false)
      */
     private $word;
-   
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="WordGroup", inversedBy="words")
+     * @ORM\JoinColumn(name="wgid", referencedColumnName="id")
+     */
+    private $wordGroup;
+            
     public function getId(){
         return $this->id;
     }
@@ -65,6 +71,13 @@ class ArticleWordGroup
     public function setWord($word)
     {
         $this->word = $word;
+    }
+     public function getWordGroup(){
+        return $this->wordGroup;
+    }
+    public function setWordGroup($wordGroup)
+    {
+        $this->wordGroup = $wordGroup;
     }
 }
 

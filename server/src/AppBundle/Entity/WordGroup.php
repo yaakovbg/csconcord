@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * WordGroup
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class WordGroup
 {
+   
     /**
      * @var string
      *
@@ -27,7 +29,16 @@ class WordGroup
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-    
+     
+    /**
+     * @ORM\OneToMany(targetEntity="ArticleWordGroup", mappedBy="wordGroup")
+     */
+     private $words;
+     
+      public function __construct()
+    {
+        $this->words = new ArrayCollection();
+    }
    
     public function getId(){
         return $this->id;
@@ -43,11 +54,30 @@ class WordGroup
         $this->id = $id;
     }
     public function getName(){
-        return $this->title;
+        return $this->name;
     }
-    public function setName($title)
+    public function setName($name)
     {
-        $this->title = $title;
+      
+        $this->name = $name;
+    }
+     public function addWord($word){
+          print_r('here2');
+        return $this->words->add($word);
+    }
+    public function setWords($words)
+    {
+       print_r('here1');
+        if(is_array($words)){
+            foreach($words as $k=>$word){
+                $this->addWord($word);
+            }
+        }
+    }
+    public function getWords()
+    {
+        
+        return $this->words;
     }
 }
 

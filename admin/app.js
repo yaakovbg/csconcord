@@ -28,8 +28,8 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
 		    url: "/main",
 		    views: {
 		        "main": {
-		            templateUrl: "components/main/main.html",
-		            controller: "main"
+		            templateUrl: "components/search/search.html",
+		            controller: "search"
 		        }
 		    }
 		})

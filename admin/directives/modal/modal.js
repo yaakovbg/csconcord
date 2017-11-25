@@ -118,9 +118,7 @@ admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootSco
                     scope.modalShow = false;
                 }
                 scope.confirm = function () {
-                    scope.hasError = hasError;
-                    if (hasError)
-                        return;
+                  
                     scope.orginalModel = scope.ngModel;
                     scope.close();
                     if (scope.onConfirm) {
