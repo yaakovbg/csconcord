@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityRepository;
 use JMS\Serializer\SerializerBuilder;
 use AppBundle\Entity\File;
 use AppBundle\Entity\ArticleWordGroup;
+use AppBundle\Entity\WordGroup;
 
 class WordGroupRepository extends BaseRepository {
 
@@ -20,8 +21,45 @@ class WordGroupRepository extends BaseRepository {
      * @param WordGroup $wordGroup
      * @return Boolen
      */
-    public function save($wordGroup) {
-       $res='';
+    public function save(WordGroup $wordGroup) {
+        $arr = $this->serializeArr($wordGroup);
+        if (isset($arr['id'])) {//update
+        } else {
+            $this->_em->getConnection()->beginTransaction();
+            try{
+                $params = array();
+                $sqlArr='';
+               
+                $res = $this->smartQuery(array(
+                    'sql' => "insert into `wordgroup`(name) values (:wgname);",      
+                    'par' => array('wgname'=>$wordGroup->getName()),
+                    'ret' => 'result'
+                ));
+                $wgid=$this->_em->getConnection()->lastInsertId();
+                foreach($wordGroup->getWords() as $k=>$v){
+                    $params[]=$v;
+                    $sqlArr.="($wgid,?)";
+                }
+                echo  "insert into `articlewordgroup`(wgid,word) values $sqlArr;";
+                print_r($params);
+               $res = $this->executeStmt("insert into `articlewordgroup`(wgid,word) values ($sqlArr);", $params);
+//                 $res = $this->smartQuery(array(
+//                    'sql' => "insert into `articlewordgroup`(wgid,word) values $sqlArr;",      
+//                    'par' => $params,
+//                    'ret' => 'result'
+//                ));
+                 $this->_em->getConnection()->commit();
+            }catch(Exception $e){
+                //An exception has occured, which means that one of our database queries
+                //failed.
+                //Print out the error message.
+                echo $e->getMessage();
+                //Rollback the transaction.
+                $this->_em->getConnection()->rollBack();
+                $res=$e;
+            }
+            
+        }
 
 
         return $res;
@@ -42,7 +80,7 @@ class WordGroupRepository extends BaseRepository {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
-        
+
         $res = $this->smartQuery(array(
             'sql' => "select * from `articleword` $where $limit",
             'par' => $paramArr,
@@ -53,9 +91,9 @@ class WordGroupRepository extends BaseRepository {
             'par' => $paramArr,
             'ret' => 'fetch-assoc'
         ));
-        $totalRows=$count['total_rows'];
-        $numOfPages=floor ($totalRows/$numperpage);
-        $ret=array('rows'=>$res,'total_rows'=>$totalRows,'numberOfPages'=>$numOfPages);
+        $totalRows = $count['total_rows'];
+        $numOfPages = floor($totalRows / $numperpage);
+        $ret = array('rows' => $res, 'total_rows' => $totalRows, 'numberOfPages' => $numOfPages);
         return $ret;
     }
 

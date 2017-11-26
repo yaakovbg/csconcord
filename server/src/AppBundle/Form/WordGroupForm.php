@@ -19,9 +19,11 @@ class WordGroupForm extends AbstractType
                         new NotBlank(),
                     ),))
                 ->add('words',CollectionType::class, array(
-                    // each entry in the array will be an "email" field
+                    'allow_add'=>true,
+                    'allow_delete'=>true,
+                    // each entry in the array will be an "'word'" field
                     'entry_type'   => TextType::class,
-                    // these options are passed to each "email" type
+                    // these options are passed to each "word" type
                    
                 ));   
         

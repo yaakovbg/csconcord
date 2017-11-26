@@ -42,8 +42,12 @@ class WordGroupController extends FOSRestController {
         $form = $this->createForm(WordGroupForm::class, $wordgroup);
         $form->submit($data);
         $d = $form->getData();
-       
-        return array('form'=>$d,'data'=>$data);
+        $wordGroupRepo->save($d);
+        print_r($d);
+      // $wordgroup->setWords($data['words']);
+      // $d=$wordgroup;
+        //return array('form'=>$d,'data'=>$data);
+        return '';
     }
   
 

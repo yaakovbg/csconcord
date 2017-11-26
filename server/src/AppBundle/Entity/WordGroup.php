@@ -62,18 +62,23 @@ class WordGroup
         $this->name = $name;
     }
      public function addWord($word){
-          print_r('here2');
+        //  print_r('here2');
         return $this->words->add($word);
     }
     public function setWords($words)
     {
-       print_r('here1');
+       //print_r('here1');
         if(is_array($words)){
             foreach($words as $k=>$word){
                 $this->addWord($word);
             }
         }
     }
+    /**
+     * gets words
+     *
+     * @return ArrayCollection wordgroup words
+     */
     public function getWords()
     {
         
