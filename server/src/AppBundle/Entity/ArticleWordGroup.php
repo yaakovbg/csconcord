@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * ArticleWordGroup
@@ -20,18 +21,21 @@ class ArticleWordGroup
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Type("integer")
      */
     private $id;
      /**
      * @var integer
      *
      * @ORM\Column(name="wgid", type="integer")
+     * @Type("integer")
      */
     private $wgid;
     /**
      * @var string
      *
      * @ORM\Column(name="word", type="string", length=256, nullable=false)
+     * @Type("string")
      */
     private $word;
     

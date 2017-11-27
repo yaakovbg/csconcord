@@ -14,8 +14,39 @@ use JMS\Serializer\SerializerBuilder;
 use AppBundle\Entity\File;
 use AppBundle\Entity\ArticleWordGroup;
 use AppBundle\Entity\WordGroup;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class WordGroupRepository extends BaseRepository {
+
+    /**
+     * returns all word groups
+     * @return array all word groups
+     */
+    public function getAllWordGroups() {
+        $wordgroups = $this->smartQuery(array(
+            'sql' => "select * from `wordgroup`",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        $words = $this->smartQuery(array(
+            'sql' => "select * from `articlewordgroup`",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        $wgMap = array();
+        $wgArray =new ArrayCollection;
+        foreach ($wordgroups as $k => $v) {
+            $wg = new WordGroup($v);
+            $wgMap[$wg->getId()] = $wg;
+            $wgArray->add($wg);
+        }
+        foreach ($words as $k => $v) {
+            $awg=$this->deserializeArr($v, ArticleWordGroup::class);
+            $wgMap[$v['wgid']]->addWord($awg);
+        }
+        
+        return $wgArray;
+    }
 
     /**
      * @param WordGroup $wordGroup
@@ -26,42 +57,34 @@ class WordGroupRepository extends BaseRepository {
         if (isset($arr['id'])) {//update
         } else {
             $this->_em->getConnection()->beginTransaction();
-            try{
+            try {
                 $params = array();
-                $sqlArr='';
-               
+                $sqlArr = '';
+
                 $res = $this->smartQuery(array(
-                    'sql' => "insert into `wordgroup`(name) values (:wgname);",      
-                    'par' => array('wgname'=>$wordGroup->getName()),
+                    'sql' => "insert into `wordgroup`(name) values (:wgname);",
+                    'par' => array('wgname' => $wordGroup->getName()),
                     'ret' => 'result'
                 ));
-                $wgid=$this->_em->getConnection()->lastInsertId();
-                foreach($wordGroup->getWords() as $k=>$v){
-                    $params[]=$v;
-                    $sqlArr.="($wgid,?)";
+                $wgid = $this->_em->getConnection()->lastInsertId();
+
+                foreach ($wordGroup->getWords() as $k => $v) {
+                    $params[] = $v;
+                    $sqlArr .= ($sqlArr !== '') ? ',' : '';
+                    $sqlArr .= "($wgid,?)";
                 }
-                echo  "insert into `articlewordgroup`(wgid,word) values $sqlArr;";
-                print_r($params);
-               $res = $this->executeStmt("insert into `articlewordgroup`(wgid,word) values ($sqlArr);", $params);
-//                 $res = $this->smartQuery(array(
-//                    'sql' => "insert into `articlewordgroup`(wgid,word) values $sqlArr;",      
-//                    'par' => $params,
-//                    'ret' => 'result'
-//                ));
-                 $this->_em->getConnection()->commit();
-            }catch(Exception $e){
+                $res = $this->executeStmt("insert into `articlewordgroup`(wgid,word) values $sqlArr;", $params);
+                $this->_em->getConnection()->commit();
+            } catch (Exception $e) {
                 //An exception has occured, which means that one of our database queries
                 //failed.
                 //Print out the error message.
                 echo $e->getMessage();
                 //Rollback the transaction.
                 $this->_em->getConnection()->rollBack();
-                $res=$e;
+                $res = $e;
             }
-            
         }
-
-
         return $res;
     }
 

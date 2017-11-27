@@ -27,28 +27,29 @@ class WordGroupController extends FOSRestController {
      */
     public function getWordGroups() {
         $filerepo = $this->getDoctrine()->getRepository(WordGroup::class);
-        $restresult = $filerepo->findAll();
+        $data = $filerepo->getAllWordGroups();
 
-        return $restresult;
+        return $data;
     }
-     /**
+
+    /**
      * @Rest\Post("/wordGroup")
      */
     public function postWordGroup(Request $request) {
         $data = json_decode($request->getContent(), true);
         $wordGroupRepo = $this->getDoctrine()->getRepository(WordGroup::class);
         $wordgroup = new WordGroup;
-        
+
+        //validate data
         $form = $this->createForm(WordGroupForm::class, $wordgroup);
         $form->submit($data);
         $d = $form->getData();
         $wordGroupRepo->save($d);
-        print_r($d);
-      // $wordgroup->setWords($data['words']);
-      // $d=$wordgroup;
+        
+        // $wordgroup->setWords($data['words']);
+        // $d=$wordgroup;
         //return array('form'=>$d,'data'=>$data);
         return '';
     }
-  
 
 }

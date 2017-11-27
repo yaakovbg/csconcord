@@ -35,9 +35,13 @@ class WordGroup
      */
      private $words;
      
-      public function __construct()
+      public function __construct($args=null)
     {
         $this->words = new ArrayCollection();
+        if(($args!==null) && gettype($args) == "array"){
+            if(isset($args['id'])) $this->id=$args['id'];
+            if(isset($args['name'])) $this->name=$args['name'];
+        }
     }
    
     public function getId(){
