@@ -26,8 +26,8 @@
                                                         <thead>
                                                                 <tr>
                                                                         <th>#</th>
-                                                                        <th>כותרת</th>
-                                                                        <th>נושא</th>
+                                                                        <th>שם הקבוצה</th>
+                                                                        <th>מילים בקבוצה</th>
                                                                         
                                                                         <th></th>
                                                                 </tr>
@@ -35,8 +35,8 @@
                                                         <tbody ng-model="wordGroups">
                                                                 <tr ng-repeat="wordGroup in wordGroups">
                                                                         <td>{{$index+1}}</td>
-                                                                        <td>{{wordGroup.title}}</td>
-                                                                        <td>{{wordGroup.topic}}</td>
+                                                                        <td>{{wordGroup.name}}</td>
+                                                                        <td><span ng-repeat="word in wordGroup.words">{{word.word+' '}}</span></td>
                                                                        
                                                                         <td>
                                                                             <span modal-wordgroup on-confirm="editWordGroup(wordGroup)" ng-model="wordGroup" >

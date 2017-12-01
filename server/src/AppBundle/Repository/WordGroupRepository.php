@@ -34,56 +34,100 @@ class WordGroupRepository extends BaseRepository {
             'ret' => 'all'
         ));
         $wgMap = array();
-        $wgArray =new ArrayCollection;
+        $wgArray = new ArrayCollection;
         foreach ($wordgroups as $k => $v) {
             $wg = new WordGroup($v);
             $wgMap[$wg->getId()] = $wg;
             $wgArray->add($wg);
         }
         foreach ($words as $k => $v) {
-            $awg=$this->deserializeArr($v, ArticleWordGroup::class);
+            $awg = $this->deserializeArr($v, ArticleWordGroup::class);
             $wgMap[$v['wgid']]->addWord($awg);
         }
-        
+
         return $wgArray;
     }
-
+/**
+ *      deletes given word group
+     * @param Integer $wgid
+     * @return Boolen
+     */
+    public function delete(WordGroup $wordGroup) {
+        $arr = $this->serializeArr($wordGroup);
+        $this->_em->getConnection()->beginTransaction();
+        try {
+            $wgid=$arr['id'];
+            $params = array();
+            $sqlArr = '';
+            $res = $this->smartQuery(array(
+                'sql' => "delete from `articlewordgroup` where wgid=:wgid",
+                'par' => array('wgid' => $wgid),
+                'ret' => 'result'
+            ));   
+            $res = $this->smartQuery(array(
+                'sql' => "delete from `wordgroup` where id=:wgid",
+                'par' => array('wgid' => $wgid),
+                'ret' => 'result'
+            )); 
+            $this->_em->getConnection()->commit();
+        } catch (Exception $e) {
+            //An exception has occured, which means that one of our database queries
+            //failed.
+            //Print out the error message.
+            echo $e->getMessage();
+            //Rollback the transaction.
+            $this->_em->getConnection()->rollBack();
+            $res = $e;
+        }
+        return $res;
+    }
     /**
      * @param WordGroup $wordGroup
      * @return Boolen
      */
     public function save(WordGroup $wordGroup) {
         $arr = $this->serializeArr($wordGroup);
+        $this->_em->getConnection()->beginTransaction();
+       
+        try {
         if (isset($arr['id'])) {//update
-        } else {
-            $this->_em->getConnection()->beginTransaction();
-            try {
-                $params = array();
-                $sqlArr = '';
-
-                $res = $this->smartQuery(array(
-                    'sql' => "insert into `wordgroup`(name) values (:wgname);",
-                    'par' => array('wgname' => $wordGroup->getName()),
-                    'ret' => 'result'
-                ));
-                $wgid = $this->_em->getConnection()->lastInsertId();
-
-                foreach ($wordGroup->getWords() as $k => $v) {
-                    $params[] = $v;
+            $wgid=$arr['id'];
+        }
+        else{//insert
+           
+             $res = $this->smartQuery(array(
+                'sql' => "insert into `wordgroup`(name) values (:wgname);",
+                'par' => array('wgname' => $wordGroup->getName()),
+                'ret' => 'result'
+            ));
+            $wgid = $this->_em->getConnection()->lastInsertId();
+        }
+        
+            $params = array();
+            $sqlArr = '';
+            $res = $this->smartQuery(array(
+                'sql' => "delete from `articlewordgroup` where wgid=:wgid",
+                'par' => array('wgid' => $wgid),
+                'ret' => 'result'
+            ));   
+         
+            foreach ($wordGroup->getWords() as $k => $v) {
+               if(isset($v['word'])){
+                    $params[] = $v['word'];
                     $sqlArr .= ($sqlArr !== '') ? ',' : '';
                     $sqlArr .= "($wgid,?)";
-                }
-                $res = $this->executeStmt("insert into `articlewordgroup`(wgid,word) values $sqlArr;", $params);
-                $this->_em->getConnection()->commit();
-            } catch (Exception $e) {
-                //An exception has occured, which means that one of our database queries
-                //failed.
-                //Print out the error message.
-                echo $e->getMessage();
-                //Rollback the transaction.
-                $this->_em->getConnection()->rollBack();
-                $res = $e;
+               } 
             }
+            $res = $this->executeStmt("insert into `articlewordgroup`(wgid,word) values $sqlArr ON DUPLICATE KEY UPDATE wgid= VALUES(wgid),word=VALUES(word);", $params);
+            $this->_em->getConnection()->commit();
+        } catch (Exception $e) {
+            //An exception has occured, which means that one of our database queries
+            //failed.
+            //Print out the error message.
+            echo $e->getMessage();
+            //Rollback the transaction.
+            $this->_em->getConnection()->rollBack();
+            $res = $e;
         }
         return $res;
     }

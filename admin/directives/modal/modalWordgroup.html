@@ -14,13 +14,13 @@
                         <p class="help-block">שם הקבוצה</p>
                         <input type='text' class="form-control" ng-model="$parent.ngModel.name" placeholder="שם הקבוצה">
                     </div>
-                    <div class="panel panel-default" ng-init="$parent.ngModel.articleWords=($parent.ngModel.articleWords)?$parent.ngModel.articleWords:[]">
+                    <div class="panel panel-default" ng-init="$parent.ngModel.words=($parent.ngModel.words)?$parent.ngModel.words:[]">
                         <div class="panel-heading">
                             מילים בקבוצה
                         </div> 
                         <div class="panel-body">
-                            <span type="button" class="btn btn-default" ng-repeat="word in $parent.ngModel.articleWords">{{word}}
-                                <button type="button" class="btn btn-danger btn-circle" ng-click="$parent.ngModel.articleWords.splice($index,1)"><i class="fa fa-times"></i> </button>
+                            <span type="button" class="btn btn-default" ng-repeat="word in $parent.ngModel.words">{{word.word}}
+                                <button type="button" class="btn btn-danger btn-circle" ng-click="$parent.ngModel.words.splice($index,1)"><i class="fa fa-times"></i> </button>
                             </span>
                         </div>
                     </div>
@@ -31,15 +31,13 @@
                             <div class="panel-body">
                                 <div class="list-group">
                                     <p class="help-block" ng-if="words.rows.length===0">אין תוצאות לחיפוש</p>
-                                    <a role='button' class="list-group-item" ng-repeat="worddata in words.rows" ng-click="($parent.ngModel.articleWords.indexOf(worddata.word)==-1)?$parent.ngModel.articleWords.push(worddata.word):''"> 
+                                    <a role='button' class="list-group-item" ng-repeat="worddata in words.rows" ng-click="($parent.ngModel.words.indexOf(worddata.word)==-1)?$parent.ngModel.words.push({word:worddata.word}):''"> 
                                       <i class="fa fa-text-width fa-fw"></i> 
                                         {{worddata.word}}
                                     </a>
                                  </div>
-                            </div>
-                            
-                        </div>
-                        
+                            </div>  
+                        </div>   
                     </div>
                  			
 
