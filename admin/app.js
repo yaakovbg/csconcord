@@ -69,6 +69,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 }
             }
         })
+        .state("wordRelation", {
+            url: "/wordRelation",
+            views: {
+                "main": {
+                    templateUrl: "components/wordRelation/wordRelation.html",
+                    controller: "wordRelation"
+                }
+            }
+        })
 	
 	var counter=0;
 	$httpProvider.interceptors.push(function($document,$rootScope) {

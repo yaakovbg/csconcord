@@ -1,4 +1,3 @@
-
 admin.directive('modalFileuploader', ['$rootScope', 'Upload', function ($rootScope, Upload) {
         return {
             restrict: 'A',
@@ -67,7 +66,7 @@ admin.directive('modalFileuploader', ['$rootScope', 'Upload', function ($rootSco
             },
         };
     }]);
-admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootScope,$http,$q) {
+admin.directive('modalWordgroup', ['$rootScope', '$http', '$q', function ($rootScope, $http, $q) {
         return {
             restrict: 'A',
             templateUrl: './directives/modal/modalWordgroup.html',
@@ -78,32 +77,38 @@ admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootSco
             },
             link: function (scope, elem, attrs) {
                 var canceller = $q.defer();
+                var firstOpen = false;
                 scope.modalShow = false;
                 scope.hasError = false;
                 scope.modalLoad = false;
                 scope.orginalModel = angular.copy(scope.ngModel);
-                scope.words=[];
-                
+                scope.words = [];
+
                 scope.data = {};
-               
+
                 scope.params = {page: 1, numPerPage: 10, order: {}, search: ''};
-                scope.getWords=function(){
+                scope.getWords = function () {
                     canceller.resolve();
                     canceller = $q.defer();
                     $http({method: 'POST', url: '../server/articlewords', data: scope.params, timeout: canceller.promise}).
-                    success(function (data, status, headers, config) {
-                        scope.words = data;
-                    });
+                            success(function (data, status, headers, config) {
+                                scope.words = data;
+                            });
                 }
-                 scope.$watch('params', function () {
-                        scope.getWords();
-                    }, true)
-                scope.init=function(){
-                    
-                    scope.params.search='';
+
+                scope.init = function () {
+
+                    scope.params.search = '';
                     scope.getWords();
                 }
                 scope.open = function () {
+                    if(!firstOpen){
+                        firstOpen = true;
+                        scope.$watch('params', function () {
+                            scope.getWords();
+                        }, true)
+                    }
+                    
                     scope.init();
                     scope.orginalModel = angular.copy(scope.ngModel);
                     // alert('modal.js, corOrder: open');
@@ -111,14 +116,14 @@ admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootSco
                     body.className = body.className + " modal-open";
                     scope.modalShow = true;
                 }
-                scope.close = function () {   
+                scope.close = function () {
                     scope.ngModel = angular.copy(scope.orginalModel);
                     var body = document.getElementsByTagName("body")[0];
                     body.className = body.className.replace(/\bmodal-open\b/, '');
                     scope.modalShow = false;
                 }
                 scope.confirm = function () {
-                  
+
                     scope.orginalModel = scope.ngModel;
                     scope.close();
                     if (scope.onConfirm) {
@@ -126,7 +131,81 @@ admin.directive('modalWordgroup', ['$rootScope','$http','$q', function ($rootSco
                     }
 
                 }
-            
+
+            },
+        };
+    }]);
+admin.directive('modalWordrelation', ['$rootScope', '$http', '$q', function ($rootScope, $http, $q) {
+        return {
+            restrict: 'A',
+            templateUrl: './directives/modal/modalWordrelation.html',
+            transclude: true,
+            scope: {
+                onConfirm: '&onConfirm',
+                ngModel: '='
+            },
+            link: function (scope, elem, attrs) {
+                var canceller = $q.defer();
+                var firstOpen = false;
+                scope.modalShow = false;
+                scope.hasError = false;
+                scope.modalLoad = false;
+                scope.orginalModel = angular.copy(scope.ngModel);
+                scope.words = [];
+
+                scope.data = {};
+                scope.test= function(p,w){
+                   
+                    alert();
+                    scope.pointer=p;
+                    scope.wpointer=w;
+                }
+                scope.params = {page: 1, numPerPage: 10, order: {}, search: ''};
+                scope.getWords = function () {
+                    canceller.resolve();
+                    canceller = $q.defer();
+                    $http({method: 'POST', url: '../server/articlewords', data: scope.params, timeout: canceller.promise}).
+                            success(function (data, status, headers, config) {
+                                scope.words = data;
+                            });
+                }
+
+                scope.init = function () {
+
+                    scope.params.search = '';
+                    scope.getWords();
+                }
+                scope.open = function () {
+                    if(!firstOpen){
+                        firstOpen = true;
+                        scope.$watch('params', function () {
+                            scope.getWords();
+                        }, true)
+                    }
+                    
+                    scope.init();
+                    scope.orginalModel = angular.copy(scope.ngModel);
+                    // alert('modal.js, corOrder: open');
+                    var body = document.getElementsByTagName("body")[0];
+                    body.className = body.className + " modal-open";
+                    scope.modalShow = true;
+                }
+                scope.close = function () {
+                    scope.ngModel = angular.copy(scope.orginalModel);
+                    var body = document.getElementsByTagName("body")[0];
+                    body.className = body.className.replace(/\bmodal-open\b/, '');
+                    scope.modalShow = false;
+                }
+                scope.confirm = function () {
+
+                    scope.orginalModel = scope.ngModel;
+                    scope.close();
+                    if (scope.onConfirm) {
+                        scope.onConfirm();
+                    }
+
+                }
+
             },
         };
     }]);
