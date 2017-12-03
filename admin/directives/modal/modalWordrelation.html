@@ -14,15 +14,21 @@
                         <p class="help-block">שם היחס</p>
                         <input type='text' class="form-control" ng-model="$parent.ngModel.name" placeholder="שם הקבוצה">
                     </div>
-                    <div class="panel panel-default" ng-init="$parent.ngModel.tuples=($parent.ngModel.tuples)?$parent.ngModel.tuples:[]">
+                    <div class="panel panel-default" ng-init="$parent.ngModel.tuples = ($parent.ngModel.tuples) ? $parent.ngModel.tuples : []">
                         <div class="panel-heading">
                             זוגות המתאימים ליחס
                         </div> 
-                        <div class="panel-body" ng-init="data.pointer=false;data.wpointer=''">
+                        <div class="panel-body" ng-init="data.pointer = false;data.wpointer = ''">
                             <button class="btn btn-info" ng-click="$parent.ngModel.tuples.push({})">הוסף זוג סדור</button>
+                           
                             <span type="button"  class="btn btn-default" ng-repeat="tuple in $parent.ngModel.tuples">
-                                <span type="button" ng-click="data.pointer=tuple;data.wpointer='word_a';"><i class="fa fa-text-width fa-fw"></i> {{tuple.word_a}}</span>|<span ng-click="data.pointer=tuple;data.wpointer='word_b';"><i class="fa fa-text-width fa-fw"></i> {{tuple.word_b}}</span>
-                                    <button type="button" class="btn btn-danger btn-circle" ng-click="$parent.ngModel.tuples.splice($index,1)"><i class="fa fa-times"></i> </button>
+                                <span type="button" ng-click="data.pointer = tuple;data.wpointer = 'word_a';">
+                                    <i class="fa fa-text-width fa-fw"></i> {{tuple.word_a}}
+                                </span>|
+                                <span ng-click="data.pointer = tuple;data.wpointer = 'word_b';">
+                                    <i class="fa fa-text-width fa-fw"></i> {{tuple.word_b}}
+                                </span>
+                                <button type="button" class="btn btn-danger btn-circle" ng-click="$parent.ngModel.tuples.splice($index, 1)"><i class="fa fa-times"></i> </button>
                             </span>
                         </div>
                     </div>
@@ -32,16 +38,16 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="list-group">
-                                    <p class="help-block" ng-if="words.rows.length===0">אין תוצאות לחיפוש</p>
-                                    <a role='button' class="list-group-item" ng-repeat="worddata in words.rows" ng-click="(data.pointer!==false)?( data.pointer[data.wpointer] = worddata.word):''"> 
-                                      <i class="fa fa-text-width fa-fw"></i> 
+                                    <p class="help-block" ng-if="words.rows.length === 0">אין תוצאות לחיפוש</p>
+                                    <a role='button' class="list-group-item" ng-repeat="worddata in words.rows" ng-click="(data.pointer !== false) ? (data.pointer[data.wpointer] = worddata.word) : ''"> 
+                                        <i class="fa fa-text-width fa-fw"></i> 
                                         {{worddata.word}}
                                     </a>
-                                 </div>
+                                </div>
                             </div>  
                         </div>   
                     </div>
-                 			
+
 
                 </div>
                 <div class="modal-footer">

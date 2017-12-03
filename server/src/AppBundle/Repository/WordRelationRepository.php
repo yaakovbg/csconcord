@@ -28,7 +28,7 @@ class WordRelationRepository extends BaseRepository {
             'par' => array(),
             'ret' => 'all'
         ));
-        $words = $this->smartQuery(array(
+        $tuples = $this->smartQuery(array(
             'sql' => "select * from `wordrelation`",
             'par' => array(),
             'ret' => 'all'
@@ -40,9 +40,9 @@ class WordRelationRepository extends BaseRepository {
             $wrMap[$wr->getId()] = $wr;
             $wrArray->add($wr);
         }
-        foreach ($words as $k => $v) {
+        foreach ($tuples as $k => $v) {
             $awr = $this->deserializeArr($v, WordRelation::class);
-            $wrMap[$v['rid']]->addWord($awr);
+            $wrMap[$v['rid']]->addTuple($awr);
         }
 
         return $wrArray;
@@ -111,14 +111,15 @@ class WordRelationRepository extends BaseRepository {
                 'ret' => 'result'
             ));   
          
-            foreach ($relation->getWords() as $k => $v) {
-               if(isset($v['word'])){
-                    $params[] = $v['word'];
+            foreach ($relation->getTuples() as $k => $v) {
+               if(isset($v['word_a']) && isset($v['word_b'])){
+                    $params[] = $v['word_a'];
+                    $params[] = $v['word_b'];
                     $sqlArr .= ($sqlArr !== '') ? ',' : '';
-                    $sqlArr .= "($rid,?)";
+                    $sqlArr .= "($rid,?,?)";
                } 
             }
-            $res = $this->executeStmt("insert into `wordrelation`(rid,word) values $sqlArr ON DUPLICATE KEY UPDATE rid= VALUES(rid),word=VALUES(word);", $params);
+            $res = $this->executeStmt("insert into `wordrelation`(rid,word_a,word_b) values $sqlArr ON DUPLICATE KEY UPDATE rid= VALUES(rid),word_a=VALUES(word_a),word_b=VALUES(word_b);", $params);
             $this->_em->getConnection()->commit();
         } catch (Exception $e) {
             //An exception has occured, which means that one of our database queries

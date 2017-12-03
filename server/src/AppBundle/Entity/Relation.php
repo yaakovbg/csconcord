@@ -37,7 +37,7 @@ class Relation
      
       public function __construct($args=null)
     {
-        $this->words = new ArrayCollection();
+        $this->tuples = new ArrayCollection();
         if(($args!==null) && gettype($args) == "array"){
             if(isset($args['id'])) $this->id=$args['id'];
             if(isset($args['name'])) $this->name=$args['name'];
@@ -65,16 +65,16 @@ class Relation
       
         $this->name = $name;
     }
-     public function addWord($word){
+     public function addTuple($tuple){
         //  print_r('here2');
-        return $this->words->add($word);
+        return $this->tuples->add($tuple);
     }
     public function setTuples($tuples)
     {
        //print_r('here1');
         if(is_array($tuples)){
-            foreach($tuples as $k=>$word){
-                $this->addWord($word);
+            foreach($tuples as $k=>$tuple){
+                $this->addTuple($tuple);
             }
         }
     }
@@ -86,7 +86,7 @@ class Relation
     public function getTuples()
     {
         
-        return $this->words;
+        return $this->tuples;
     }
 }
 

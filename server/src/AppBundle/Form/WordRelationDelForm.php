@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Form;
 
-use AppBundle\Entity\WordGroup;
+use AppBundle\Entity\Relation;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,9 +28,9 @@ class WordRelationDelForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'allow_extra_fields' => true,
+             'allow_extra_fields' => true,
              'csrf_protection' => false,
-             'data_class' => 'AppBundle\Entity\WordGroup'
+             'data_class' => 'AppBundle\Entity\Relation'
         ]);
     }
 }

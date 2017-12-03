@@ -39,6 +39,12 @@ class ArticleWord
      * @ORM\Column(name="position", type="integer", length=13)
      */
     private $position;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="wordPosition", type="integer", length=13)
+     */
+    private $wordPosition;
       /**
      * @var integer
      *
@@ -121,6 +127,22 @@ class ArticleWord
     }
     public function getPosition(){
         return $this->position;
+    }
+     /**
+     * Sets position.
+     *
+     * @param integer $position
+     */
+    public function setWordPosition($position)
+    {
+        $this->wordPosition = $position;
+    }
+    /**
+     * 
+     * @return Iteger word positionn in file by words
+     */
+    public function getWordPosition(){
+        return $this->wordPosition;
     }
 
 }

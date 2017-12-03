@@ -26,8 +26,8 @@
                                                         <thead>
                                                                 <tr>
                                                                         <th>#</th>
-                                                                        <th>שם הקבוצה</th>
-                                                                        <th>מילים בקבוצה</th>
+                                                                        <th>שם היחס</th>
+                                                                        <th>זוגות ביחס</th>
                                                                         
                                                                         <th></th>
                                                                 </tr>
@@ -36,10 +36,10 @@
                                                                 <tr ng-repeat="wordRelation in wordRelations">
                                                                         <td>{{$index+1}}</td>
                                                                         <td>{{wordRelation.name}}</td>
-                                                                        <td><span ng-repeat="word in wordRelation.words">{{word.word+' '}}</span></td>
+                                                                        <td><span ng-repeat="tuple in wordRelation.tuples">({{tuple.word_a}},{{tuple.word_b}})</span></td>
                                                                        
                                                                         <td>
-                                                                            <span modal-wordgroup on-confirm="editWordRelation(wordRelation)" ng-model="wordRelation" >
+                                                                            <span modal-wordrelation on-confirm="editWordRelation(wordRelation)" ng-model="wordRelation" >
                                                                                <button class="btn btn-info" type="button">
                                                                                        <i class="fa fa-edit"></i>
                                                                                </button>

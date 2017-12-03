@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Form;
 
-use AppBundle\Entity\WordGroup;
+use AppBundle\Entity\Relation;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,7 +20,7 @@ class WordRelationForm extends AbstractType
                     'constraints' => array(
                         new NotBlank(),
                     ),))
-                ->add('words',CollectionType::class, array(
+                ->add('tuples',CollectionType::class, array(
                     'allow_add'=>true,
                     'allow_delete'=>true,
                     // each entry in the array will be an "'word'" field
@@ -35,7 +35,7 @@ class WordRelationForm extends AbstractType
     {
         $resolver->setDefaults([
              'csrf_protection' => false,
-             'data_class' => 'AppBundle\Entity\WordGroup'
+             'data_class' => 'AppBundle\Entity\Relation'
         ]);
     }
 }
