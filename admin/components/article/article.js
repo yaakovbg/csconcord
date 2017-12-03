@@ -2,7 +2,7 @@ admin.controller('article', ['$rootScope', '$scope', '$state', '$http', 'userSer
        $scope.aid=$stateParams.aid;
         $scope.search=$stateParams.search;
         $scope.getArticle=function(){
-            $http({ method: 'GET', url: '../server/article/7' }).
+            $http({ method: 'GET', url: '../server/article/'+$scope.aid }).
                     success(function (data, status, headers, config) {
                             $scope.articleData=data;
                             if($scope.search && $scope.search!==''){

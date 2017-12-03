@@ -39,6 +39,11 @@
                                                                         <td>{{article.topic}}</td>
                                                                        
                                                                         <td>
+                                                                              <span modal-confirm on-confirm="analyzeArticle(article)" text="יבוצע ניתוח מילים על הקובץ" ng-model="article" >
+                                                                               <button class="btn btn-info" type="button">
+                                                                                       <i class="fa fa-edit"></i>
+                                                                               </button>
+                                                                           </span>
                                                                             <span modal-fileuploader on-confirm="editArticle(article)" ng-model="article" >
                                                                                <button class="btn btn-info" type="button">
                                                                                        <i class="fa fa-edit"></i>

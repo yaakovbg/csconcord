@@ -22,9 +22,9 @@ class ArticleWordRepository extends BaseRepository {
      */
     public function saveArticleWords($articlewords) {
         $dataVals = $this->serializeArr($articlewords);
-
+        
         $dataToInsert = array();
-        $colNames = array('position', 'articleid', 'word', 'context');
+        $colNames = array('position', 'wordPosition','articleid', 'word', 'context');
         foreach ($dataVals as $row => $data) {
             foreach ($data as $val) {
                 $dataToInsert[] = $val;

@@ -9,7 +9,35 @@ admin.run(function ($rootScope, $timeout, $state, userService,$http) {
 		$rootScope.loading=false;
 		
 })
+admin.filter('htmlEscape', function() {
+    return function(input) {
+        if (!input) {
+            return '';
+        }
+        return input.
+            replace(/&/g, '&amp;').
+            replace(/</g, '&lt;').
+            replace(/>/g, '&gt;').
+            replace(/'/g, '&#39;').
+            replace(/"/g, '&quot;')
+        ;
+    };
+});
+admin.filter('textToHtml', ['$sce', 'htmlEscapeFilter', function($sce, htmlEscapeFilter) {
+    return function(input) {
+        if (!input) {
+            return '';
+        }
+     //   input = htmlEscapeFilter(input);
 
+        var output = '';
+        $.each(input.split("\r\n"), function(key, paragraph) {
+            output += '<br>' + paragraph ;
+        });
+
+        return $sce.trustAsHtml(output);
+    };
+}])
 /**** UI Router ****/
 admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
     $urlRouterProvider.otherwise("/main");

@@ -102,9 +102,9 @@ class ArticleController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/testanalyze")
+     * @Rest\Post("/analyzeArticle")
      */
-    public function testAnalyze(Request $request) {
+    public function analyzeArticle(Request $request) {
         $data = json_decode($request->getContent());
         $analyzer = $this->container->get(FileAnalyzer::class);
         $articleId = (isset($data->id)) ? $data->id : '';
