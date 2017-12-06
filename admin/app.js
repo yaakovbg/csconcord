@@ -106,6 +106,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 }
             }
         })
+        .state("statistics", {
+            url: "/statistics",
+            views: {
+                "main": {
+                    templateUrl: "components/statistics/statistics.html",
+                    controller: "statistics"
+                }
+            }
+        })
 	
 	var counter=0;
 	$httpProvider.interceptors.push(function($document,$rootScope) {

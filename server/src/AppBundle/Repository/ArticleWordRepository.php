@@ -82,5 +82,28 @@ class ArticleWordRepository extends BaseRepository {
         $ret=array('rows'=>$res,'total_rows'=>$totalRows,'numberOfPages'=>$numOfPages);
         return $ret;
     }
-
+    /**
+     * 
+     * @return mixed statistics on words
+     */
+    public function getWordStatistics(){
+         $statistics = $this->smartQuery(array(
+            'sql' => "select word,count(word) as word_count from articleword group by word ;",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        return $statistics;
+    }
+    /**
+     * 
+     * @return mixed statistics on words
+     */
+    public function getWordOcuranceStatistics(){
+         $statistics = $this->smartQuery(array(
+            'sql' => "select a.word_count,count(a.word_count) as numOfWords from (select word,count(word) as word_count from articleword group by word)as a group by a.word_count;",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        return $statistics;
+    }
 }
