@@ -50,15 +50,45 @@ class ArticleWordRepository extends BaseRepository {
 
         return $res;
     }
+    /**
+     * @param $articlewords
+     * @return Boolen
+     */
+    public function saveArticleLetters($articleletters) {
+        $dataVals = $this->serializeArr($articleletters);
+        
+        $dataToInsert = array();
+        $colNames = array('position', 'articleid', 'letter');
+        foreach ($dataVals as $row => $data) {
+            foreach ($data as $val) {
+                $dataToInsert[] = $val;
+            }
+        }
+        $updateCols = array();
 
+        foreach ($colNames as $curCol) {
+            $updateCols[] = $curCol . " = VALUES($curCol)";
+        }
+
+        $onDup = implode(', ', $updateCols);
+        // setup the placeholders - a fancy way to make the long "(?, ?, ?)..." string
+        $rowPlaces = '(' . implode(', ', array_fill(0, count($colNames), '?')) . ')';
+        $allPlaces = implode(', ', array_fill(0, count($dataVals), $rowPlaces));
+        $sql = "INSERT INTO `articleletter` (" . implode(', ', $colNames) .
+                ") VALUES " . $allPlaces . " ON DUPLICATE KEY UPDATE $onDup";
+
+
+
+        $res = $this->executeStmt($sql, $dataToInsert);
+        return $res;
+    }
     public function getArticleWords($params) {
         $paramArr = array();
         $search = (isset($params->search) && $params->search != '') ? $params->search : false;
         $page = (isset($params->page) && $params->page != '') ? $params->page : false;
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $where = '';
-        $limit = '';
-        
+        $limit = '';       
         if ($search !== false) {
             $paramArr['search'] = "%$search%";
             $where = "where word like :search";  

@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use \AppBundle\Entity\Article;
 use \AppBundle\Entity\ArticleWord;
+use \AppBundle\Entity\ArticleLetter;
 use \Symfony\Component\DependencyInjection\ContainerAware;
 use \stdClass;
 
@@ -16,7 +17,9 @@ class FileAnalyzer {
     private $manipulatedContent;
     private $numOfWords;
     private $words;
+    private $letters;
     private $wordsData;
+    private $lettersData;
     private $wordMap;
 
     public function __construct($container) {
@@ -36,10 +39,13 @@ class FileAnalyzer {
         $this->manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", "", $this->originalContent);
         $this->manipulatedContent = str_replace("\n", " ", $this->manipulatedContent);
         $this->words = explode(" ", $this->manipulatedContent);
+        $this->letters = str_split($this->originalContent);
         $this->wordMap = new stdClass();
+        $this->letterMap = new stdClass();
         $this->wordsData = array();
 
         $this->mapWords();
+        $this->mapLetters();
         return $this->save();
     }
 
@@ -78,10 +84,19 @@ class FileAnalyzer {
             }
         }
     }
-
+    function mapLetters(){
+         foreach ($this->letters as $k => $letter) {
+              $artilceLetter = new ArticleLetter((object) array('letter' => $letter, 'position' => $k, 'articleid' => $this->articleId));
+              $this->lettersData[]=$artilceLetter;
+              
+         }
+        
+    }
     function save() {
         $articleWordrepo = $this->container->get('doctrine')->getRepository(ArticleWord::class);
-        return $articleWordrepo->saveArticleWords($this->wordsData);
+        $res1=$articleWordrepo->saveArticleWords($this->wordsData);
+        $res2=$articleWordrepo->saveArticleLetters($this->lettersData);
+        return $res1 && $res2;
     }
 
     function getWordsData() {

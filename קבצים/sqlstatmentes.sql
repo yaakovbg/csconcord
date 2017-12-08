@@ -7,3 +7,6 @@ select a.word_count,count(a.word_count) from (select word,count(word) as word_co
 SELECT DISTINCT CHAR_LENGTH(word),word from articleword ORDER BY CHAR_LENGTH(word) ASC
 
 SELECT count(a.wordlength),a.wordlength FROM (SELECT DISTINCT CHAR_LENGTH(word) as wordlength,word from articleword ) as a group by a.wordlength
+
+select letter,count(letter) as letter_count from articleletter group by letter  
+ORDER BY `articleletter`.`letter`  DESC;
