@@ -8,6 +8,10 @@ admin.controller('statistics', ['$rootScope', '$scope', '$state', '$http', 'user
                     success(function (data, status, headers, config) {
                         $scope.wordOccuranceStatistics = data;
                     });
+        $http({method: 'GET', url: '../server/letterStatistics'}).
+                    success(function (data, status, headers, config) {
+                        $scope.letterStatistics = data;
+                    });
 
 
 } ]);

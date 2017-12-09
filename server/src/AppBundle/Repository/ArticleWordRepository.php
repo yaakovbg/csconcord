@@ -136,4 +136,16 @@ class ArticleWordRepository extends BaseRepository {
         ));
         return $statistics;
     }
+    /**
+     * 
+     * @return mixed statistics on letters
+     */
+    public function getLetterStatistics(){
+         $statistics = $this->smartQuery(array(
+            'sql' => "select letter,count(letter) as letter_count from articleletter group by (BINARY letter ) ",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        return $statistics;
+    }
 }

@@ -10,3 +10,6 @@ SELECT count(a.wordlength),a.wordlength FROM (SELECT DISTINCT CHAR_LENGTH(word) 
 
 select letter,count(letter) as letter_count from articleletter group by letter  
 ORDER BY `articleletter`.`letter`  DESC;
+
+select letter,count(letter) as letter_count from articleletter group by (BINARY letter ) 
+ORDER BY `articleletter`.`letter` ASC

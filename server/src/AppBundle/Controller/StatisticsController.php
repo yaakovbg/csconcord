@@ -27,6 +27,14 @@ class StatisticsController extends FOSRestController {
         $ret=$articleWordrepo->getWordStatistics();
         return $ret;
     }
+    /**
+     * @Rest\Get("/letterStatistics")
+     */
+    public function getLetterStatistics() {
+        $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
+        $ret=$articleWordrepo->getLetterStatistics();
+        return $ret;
+    }
  /**
      * @Rest\Get("/wordOcuranceStatistics")
      */
