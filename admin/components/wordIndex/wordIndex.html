@@ -1,0 +1,69 @@
+<div id="wrapper">
+    <header></header>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <h1 class="page-header">חיפוש</h1>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <span class="form-group">
+                                    <label>חיפוש
+                                        <input type="text" class="form-control" ng-model="params.search" >
+                                    </label>
+                                </span>
+                                <span class="btn btn-info btn-file" ng-click="searchf()">
+                                    חיפוש
+                                </span>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>מספר שורות לעמוד
+                                        <input type="number" class="form-control" ng-model="numPerPage">
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-12">
+                                <pagination total-items="articleWords.total_rows" ng-model="params.page" max-size="maxSize" num-pages="articleWords.numberOfPages" items-per-page="params.numPerPage" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="row">
+                               
+
+
+ <a class="col-md-2" ui-sref="main({search:data.word})"   ng-repeat="data in articleWords.rows" style="cursor: pointer;">
+                                                
+
+                                                <span ng-bind-html="trustHtml(data.word)"></span>
+                                            </a>
+                                   
+</div>
+                              
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div><!-- /.panel -->
+
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+
+</div>
+

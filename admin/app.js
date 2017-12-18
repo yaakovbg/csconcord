@@ -53,7 +53,7 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
 		    }
 		})
 		.state("main", {
-		    url: "/main",
+		    url: "/main?search",
 		    views: {
 		        "main": {
 		            templateUrl: "components/search/search.html",
@@ -103,6 +103,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 "main": {
                     templateUrl: "components/wordRelation/wordRelation.html",
                     controller: "wordRelation"
+                }
+            }
+        })
+        .state("wordIndex", {
+            url: "/wordIndex",
+            views: {
+                "main": {
+                    templateUrl: "components/wordIndex/wordIndex.html",
+                    controller: "wordIndex"
                 }
             }
         })

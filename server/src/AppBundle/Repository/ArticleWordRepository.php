@@ -90,9 +90,9 @@ class ArticleWordRepository extends BaseRepository {
      */
     public function saveArticleParagraphs($articleparagraphs) {
         $dataVals = $this->serializeArr($articleparagraphs);
-        
+
         $dataToInsert = array();
-        $colNames = array('beginning','end', 'articleid' );
+        $colNames = array('beginning', 'end', 'articleid');
         foreach ($dataVals as $row => $data) {
             foreach ($data as $val) {
                 $dataToInsert[] = $val;
@@ -115,7 +115,6 @@ class ArticleWordRepository extends BaseRepository {
 
         $res = $this->executeStmt($sql, $dataToInsert);
         return $res;
-       
     }
 
     public function getArticleWords($params) {
@@ -160,6 +159,41 @@ class ArticleWordRepository extends BaseRepository {
             'ret' => 'all'
         ));
         return $statistics;
+    }
+
+    /**
+     * @return distinct words
+     *
+     */
+    public function getDistictWords($params) {
+        $paramArr = array();
+        $search = (isset($params->search) && $params->search != '') ? $params->search : false;
+        $page = (isset($params->page) && $params->page != '') ? $params->page : false;
+        $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
+        $where = '';
+        $limit = '';
+        if ($search !== false) {
+            $paramArr['search'] = "%$search%";
+            $where = "where word like :search";
+        }
+        if ($page !== false && $numperpage !== false) {
+            $start = ($page - 1) * $numperpage;
+            $limit = "limit $start,$numperpage";
+        }
+        $res = $this->smartQuery(array(
+            'sql' => "select distinct word from `articleword` $where $limit",
+            'par' => $paramArr,
+            'ret' => 'all'
+        ));
+        $count = $this->smartQuery(array(
+            'sql' => "select count(distinct word) as total_rows from `articleword` $where",
+            'par' => $paramArr,
+            'ret' => 'fetch-assoc'
+        ));
+        $totalRows = $count['total_rows'];
+        $numOfPages = floor($totalRows / $numperpage);
+        $ret = array('rows' => $res, 'total_rows' => $totalRows, 'numberOfPages' => $numOfPages);
+        return $ret;
     }
 
     /**

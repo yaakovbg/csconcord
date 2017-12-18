@@ -37,12 +37,12 @@ class ArticleController extends FOSRestController {
      */
     public function getArticle($id) {
         $articlerepo = $this->getDoctrine()->getRepository(Article::class);
-        $article =  $articlerepo->getArticleById($id);
+        $article = $articlerepo->getArticleById($id);
         $filesDir = $this->container->getParameter('files_directory');
         $fileFullPath = $filesDir . '/' . $article->getFilepath();
         $filecontent = file_get_contents($fileFullPath);
-       // $restresult->fileContent = $filecontent;
-        return array('fileContent'=>$filecontent,'id'=>$article->getId(),'title'=>$article->getTitle());
+        // $restresult->fileContent = $filecontent;
+        return array('fileContent' => $filecontent, 'id' => $article->getId(), 'title' => $article->getTitle());
     }
 
     /**
@@ -121,6 +121,27 @@ class ArticleController extends FOSRestController {
         $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
         $res = $articleWordrepo->getArticleWords($data);
 
+        return $res;
+        //return $filerepo->findAll();
+    }
+ /**
+     * @Rest\Post("/distinctWords")
+     */
+    public function getDistinctWords(Request $request) {
+        $data = json_decode($request->getContent());
+        $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
+        $res = $articleWordrepo->getDistictWords($data);
+
+        return $res;
+    }
+    /**
+     * @Rest\Post("/testXml")
+     */
+    public function testXml(Request $request) {
+        $data = json_decode($request->getContent());
+        $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
+        $res = $articleWordrepo->findAll();
+        //print_r($res);
         return $res;
         //return $filerepo->findAll();
     }
