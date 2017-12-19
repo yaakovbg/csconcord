@@ -46,7 +46,7 @@ class WordRelation
      */
     private $word_b; 
      /**
-     * @ORM\ManyToOne(targetEntity="Relation", inversedBy="words")
+     * @ORM\ManyToOne(targetEntity="Relation", inversedBy="tuples")
      * @ORM\JoinColumn(name="rid", referencedColumnName="id")
      */
     private $relation;

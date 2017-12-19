@@ -69,7 +69,12 @@ class ArticleWord {
      * @ORM\Column(name="context", type="string", length=512, nullable=false)
      */
     private $context;
-
+  /**
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="words")
+     * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
+     */
+    private $article;
+    
     public function getId() {
         return $this->id;
     }

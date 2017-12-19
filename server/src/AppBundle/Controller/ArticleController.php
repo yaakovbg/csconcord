@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\ArticleWord;
+use AppBundle\Entity\WordGroup;
+use AppBundle\Entity\WordRelation;
+use AppBundle\Classes\GlobalHolder;
 use AppBundle\Repository\ArticleRepository;
 use AppBundle\Form\ArticleForm;
 use AppBundle\Service\FileUploader;
@@ -139,10 +142,23 @@ class ArticleController extends FOSRestController {
      */
     public function testXml(Request $request) {
         $data = json_decode($request->getContent());
-        $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
-        $res = $articleWordrepo->findAll();
+        
+        $articleWordrepo = $this->getDoctrine()->getRepository(Article::class);        
+        $artilces = $articleWordrepo->findAll();
+        
+        $grouprepo = $this->getDoctrine()->getRepository(WordGroup::class);
+        $wordgroups = $grouprepo->findAll();
+        
+        $relationrepo = $this->getDoctrine()->getRepository(WordRelation::class);
+        $relations = $relationrepo->findAll();
         //print_r($res);
-        return $res;
+        $g=new GlobalHolder();
+        
+        $g->articles=$artilces;
+        $g->wordGroups=$wordgroups;
+        $g->relations=$relations;
+        
+        return $g;
         //return $filerepo->findAll();
     }
 
