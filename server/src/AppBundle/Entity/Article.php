@@ -136,5 +136,15 @@ class Article {
         }
         return $arr;
     }
+    /**
+     * updates article words to be article new id
+     * @param integer $id
+     */
+    public function updateArticleId($id){
+        $this->id=$id;
+        foreach ($this->words as $k=>$v){
+            $v->setArticleid($id);
+        }
+    }
 
 }

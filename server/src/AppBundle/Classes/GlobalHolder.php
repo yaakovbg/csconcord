@@ -39,7 +39,8 @@ class GlobalHolder {
      * @Serializer\Type("array<AppBundle\Entity\Relation>")
      */
     public $relations;
-
+    
+ 
     public function removeIds() {
         foreach ($this->articles as $k => $v) {
             $words = $v->getWords();

@@ -176,7 +176,13 @@ class ArticleController extends FOSRestController {
         $data = $fileUploader->read($file);
         $serializer = SerializerBuilder::create()->build();
         $g = $serializer->deserialize($data, GlobalHolder::class, 'xml');
-        return $g;
+        
+        $repo= $this->getDoctrine()->getRepository(Article::class);
+        
+        foreach($g->articles as $k=>$article){
+            $repo->importSaveArticle($article);
+        }
+        return '';
     }
 
 }

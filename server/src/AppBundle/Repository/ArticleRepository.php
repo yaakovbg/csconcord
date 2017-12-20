@@ -48,6 +48,42 @@ class ArticleRepository extends BaseRepository {
 
         return $res;
     }
+     /**
+     * @param WordGroup $wordGroup
+     * @return Boolen
+     */
+    public function importSaveArticle(Article $article) {
+        $arr = $this->serializeArr($article);
+        print_r($arr);
+        $this->_em->getConnection()->beginTransaction();
+       
+        try {
+        if (isset($arr['id'])) {//update
+            $aid=$arr['id'];
+        }
+        else{//insert
+           
+             $res = $this->smartQuery(array(
+                'sql' => "insert into `article`(title,topic,description) values (:title,:topic,:description);",
+                'par' => array('title'=>arr['title'],'topic'=>arr['topic'],'description'=>arr['description']),
+                'ret' => 'result'
+            ));
+            $aid = $this->_em->getConnection()->lastInsertId();
+            $article->updateArticleId($aid);
+        }       
+          $awrepo
+            $this->_em->getConnection()->commit();
+        } catch (Exception $e) {
+            //An exception has occured, which means that one of our database queries
+            //failed.
+            //Print out the error message.
+            echo $e->getMessage();
+            //Rollback the transaction.
+            $this->_em->getConnection()->rollBack();
+            $res = $e;
+        }
+        return $res;
+    }
 
     /**
      * @param $articleId
