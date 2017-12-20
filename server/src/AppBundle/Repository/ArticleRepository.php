@@ -58,7 +58,7 @@ class ArticleRepository extends BaseRepository {
         $arr = $this->serializeArr($article);
 
         $this->_em->getConnection()->beginTransaction();
-       
+
         try {
             if (isset($arr['id'])) {//update
                 $aid = $arr['id'];
@@ -67,7 +67,10 @@ class ArticleRepository extends BaseRepository {
                 $aid = $this->_em->getConnection()->lastInsertId();
                 $article->updateArticleId($aid);
             }
-            $res  = $this->getEntityManager()->getRepository(ArticleWord::class)->saveArticleWords($article->getWords());
+            $wordRepo=$this->getEntityManager()->getRepository(ArticleWord::class);
+            $res = $wordRepo->saveArticleWords($article->getWords());
+            $res =$res1 && $wordRepo->saveArticleLetters($article->getLetters());
+            $res1 = $wordRepo->saveArticleParagraphs($article->getParagraphs());
             $this->_em->getConnection()->commit();
         } catch (Exception $e) {
             //An exception has occured, which means that one of our database queries

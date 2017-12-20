@@ -60,8 +60,24 @@ class Article {
      */
     private $words;
 
+    /**
+     * 
+     * @Serializer\XmlList(inline=false, entry="articleLetter")
+     * @Serializer\Type("array<AppBundle\Entity\ArticleLetter>")
+     * @ORM\OneToMany(targetEntity="ArticleLetter", mappedBy="article")
+     */
+    private $letters;
+
+    /**
+     * 
+     * @Serializer\XmlList(inline=false, entry="articleParagraphs")
+     * @Serializer\Type("array<AppBundle\Entity\ArticleParagraph>")
+     * @ORM\OneToMany(targetEntity="ArticleParagraph", mappedBy="article")
+     */
+    private $paragraphs;
+
     public function getId() {
-       
+
         return $this->id;
     }
 
@@ -122,11 +138,21 @@ class Article {
     public function setFilepath($filepath) {
         $this->filepath = $filepath;
     }
-    public function getWords(){
+
+    public function getWords() {
         return $this->words;
     }
-    public function setWords($inwords){
-        $this->words=$inwords;
+
+    public function getLetters() {
+        return $this->letters;
+    }
+
+    public function getParagraphs() {
+        return $this->paragraphs;
+    }
+
+    public function setWords($inwords) {
+        $this->words = $inwords;
     }
 
     public function serilize() {
@@ -136,13 +162,20 @@ class Article {
         }
         return $arr;
     }
+
     /**
      * updates article words to be article new id
      * @param integer $id
      */
-    public function updateArticleId($id){
-        $this->id=$id;
-        foreach ($this->words as $k=>$v){
+    public function updateArticleId($id) {
+        $this->id = $id;
+        foreach ($this->words as $k => $v) {
+            $v->setArticleid($id);
+        }
+        foreach ($this->letters as $k => $v) {
+            $v->setArticleid($id);
+        }
+        foreach ($this->paragraphs as $k => $v) {
             $v->setArticleid($id);
         }
     }

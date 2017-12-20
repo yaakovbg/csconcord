@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * ArticleWord
@@ -56,6 +57,14 @@ class ArticleParagraph {
      */
     private $articleid;
 
+    /**
+     * 
+     * @Serializer\Type("array<AppBundle\Entity\Article>")
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="paragraphs")
+     * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
+     */
+    private $article;
+
     public function getId() {
         return $this->id;
     }
@@ -103,7 +112,8 @@ class ArticleParagraph {
     public function setEnd($pos) {
         $this->end = $context;
     }
-    /** 
+
+    /**
      * @return Integer end position of paragraph
      */
     public function getEnd() {

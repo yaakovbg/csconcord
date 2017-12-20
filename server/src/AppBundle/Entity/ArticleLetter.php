@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * ArticleLetter
@@ -57,7 +58,13 @@ class ArticleLetter {
      * @ORM\Column(name="letter", type="string", length=15, nullable=false)
      */
     private $letter;
-
+    /**
+     * 
+     * @Serializer\Type("array<AppBundle\Entity\Article>")
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="letters")
+     * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
+     */
+    private $article;
    
 
     public function getId() {
