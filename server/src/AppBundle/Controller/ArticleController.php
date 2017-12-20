@@ -17,6 +17,7 @@ use AppBundle\Entity\Article;
 use AppBundle\Entity\ArticleWord;
 use AppBundle\Entity\WordGroup;
 use AppBundle\Entity\WordRelation;
+use AppBundle\Entity\Relation;
 use AppBundle\Classes\GlobalHolder;
 use AppBundle\Repository\ArticleRepository;
 use AppBundle\Form\ArticleForm;
@@ -138,9 +139,9 @@ class ArticleController extends FOSRestController {
         return $res;
     }
     /**
-     * @Rest\Post("/testXml")
+     * @Rest\Get("/export")
      */
-    public function testXml(Request $request) {
+    public function export(Request $request) {
         $data = json_decode($request->getContent());
         
         $articleWordrepo = $this->getDoctrine()->getRepository(Article::class);        
@@ -149,7 +150,7 @@ class ArticleController extends FOSRestController {
         $grouprepo = $this->getDoctrine()->getRepository(WordGroup::class);
         $wordgroups = $grouprepo->findAll();
         
-        $relationrepo = $this->getDoctrine()->getRepository(WordRelation::class);
+        $relationrepo = $this->getDoctrine()->getRepository(Relation::class);
         $relations = $relationrepo->findAll();
         //print_r($res);
         $g=new GlobalHolder();
