@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use JMS\Serializer\Annotation as Serializer;
 /**
  * ArticleWord
  *
@@ -28,7 +28,7 @@ class ArticleWord {
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -37,39 +37,43 @@ class ArticleWord {
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
+     * 
      * @ORM\Column(name="position", type="integer", length=13)
      */
     private $position;
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
+     * 
      * @ORM\Column(name="wordPosition", type="integer", length=13)
      */
     private $wordPosition;
 
     /**
      * @var integer
-     *
+     *  @Serializer\Type("integer")
      * @ORM\Column(name="articleid", type="integer", length=13)
      */
     private $articleid;
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="word", type="string", length=100, nullable=false)
      */
     private $word;
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="context", type="string", length=512, nullable=false)
      */
     private $context;
-  /**
+    /**
+     * 
+     * @Serializer\Type("array<AppBundle\Entity\Article>")
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="words")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */

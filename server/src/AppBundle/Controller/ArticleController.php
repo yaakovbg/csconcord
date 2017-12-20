@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use JMS\Serializer\SerializerBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -128,7 +129,8 @@ class ArticleController extends FOSRestController {
         return $res;
         //return $filerepo->findAll();
     }
- /**
+
+    /**
      * @Rest\Post("/distinctWords")
      */
     public function getDistinctWords(Request $request) {
@@ -138,29 +140,43 @@ class ArticleController extends FOSRestController {
 
         return $res;
     }
+
     /**
      * @Rest\Get("/export")
      */
     public function export(Request $request) {
         $data = json_decode($request->getContent());
-        
-        $articleWordrepo = $this->getDoctrine()->getRepository(Article::class);        
+
+        $articleWordrepo = $this->getDoctrine()->getRepository(Article::class);
         $artilces = $articleWordrepo->findAll();
-        
+
         $grouprepo = $this->getDoctrine()->getRepository(WordGroup::class);
         $wordgroups = $grouprepo->findAll();
-        
+
         $relationrepo = $this->getDoctrine()->getRepository(Relation::class);
         $relations = $relationrepo->findAll();
         //print_r($res);
-        $g=new GlobalHolder();
+        $g = new GlobalHolder();
+
+        $g->articles = $artilces;
+        $g->wordGroups = $wordgroups;
+        $g->relations = $relations;
         
-        $g->articles=$artilces;
-        $g->wordGroups=$wordgroups;
-        $g->relations=$relations;
+        $g->removeIds();
         
         return $g;
         //return $filerepo->findAll();
+    }
+
+    /**
+     * @Rest\Post("/import")
+     */
+    public function import(Request $req, FileUploader $fileUploader) {
+        $file = $req->files->get('file');
+        $data = $fileUploader->read($file);
+        $serializer = SerializerBuilder::create()->build();
+        $g = $serializer->deserialize($data, GlobalHolder::class, 'xml');
+        return $g;
     }
 
 }

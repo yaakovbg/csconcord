@@ -40,6 +40,7 @@ class ArticleWordGroup
     private $word;
     
      /**
+      *@Type("array<AppBundle\Entity\WordGroup>")
      * @ORM\ManyToOne(targetEntity="WordGroup", inversedBy="words")
      * @ORM\JoinColumn(name="wgid", referencedColumnName="id")
      */

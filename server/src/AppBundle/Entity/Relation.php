@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * WordRelation
@@ -17,13 +18,13 @@ class Relation
    
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     private $name;
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -31,6 +32,8 @@ class Relation
     private $id;
      
     /**
+     * @Serializer\XmlList(inline=false, entry="tuple")
+     * @Serializer\Type("array<AppBundle\Entity\WordRelation>")
      * @ORM\OneToMany(targetEntity="WordRelation", mappedBy="relation")
      */
      private $tuples ;

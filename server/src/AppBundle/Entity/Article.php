@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Article
@@ -15,35 +16,36 @@ class Article {
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
     private $title;
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="topic", type="string", length=100, nullable=false)
      */
     private $topic;
 
     /**
      * @var string
-     *
+     *  @Serializer\Type("string")
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="filepath", type="string", length=512, nullable=false)
      */
     private $filepath = '';
 
     /**
      * @var integer
-     *
+     * 
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -52,11 +54,14 @@ class Article {
 
     /**
      * 
+     * @Serializer\XmlList(inline=false, entry="articleWord")
+     * @Serializer\Type("array<AppBundle\Entity\ArticleWord>")
      * @ORM\OneToMany(targetEntity="ArticleWord", mappedBy="article")
      */
     private $words;
 
     public function getId() {
+       
         return $this->id;
     }
 
@@ -116,6 +121,12 @@ class Article {
      */
     public function setFilepath($filepath) {
         $this->filepath = $filepath;
+    }
+    public function getWords(){
+        return $this->words;
+    }
+    public function setWords($inwords){
+        $this->words=$inwords;
     }
 
     public function serilize() {

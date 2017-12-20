@@ -20,7 +20,13 @@ class FileUploader
 
         return $fileName;
     }
-
+   public function read(UploadedFile $file)
+    {
+       
+       //$content = $file->openFile();
+      $contents = file_get_contents($file->getPathname());
+        return $contents;
+    }
     public function getTargetDir()
     {
         return $this->targetDir;
