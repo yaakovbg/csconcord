@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityRepository;
 use JMS\Serializer\SerializerBuilder;
 use AppBundle\Entity\File;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\ArticleWord;
 use AppBundle\Services\Entity\Article\ArticleGroup;
 
 class ArticleRepository extends BaseRepository {
@@ -48,30 +49,25 @@ class ArticleRepository extends BaseRepository {
 
         return $res;
     }
-     /**
+
+    /**
      * @param WordGroup $wordGroup
      * @return Boolen
      */
     public function importSaveArticle(Article $article) {
         $arr = $this->serializeArr($article);
-        print_r($arr);
+
         $this->_em->getConnection()->beginTransaction();
        
         try {
-        if (isset($arr['id'])) {//update
-            $aid=$arr['id'];
-        }
-        else{//insert
-           
-             $res = $this->smartQuery(array(
-                'sql' => "insert into `article`(title,topic,description) values (:title,:topic,:description);",
-                'par' => array('title'=>arr['title'],'topic'=>arr['topic'],'description'=>arr['description']),
-                'ret' => 'result'
-            ));
-            $aid = $this->_em->getConnection()->lastInsertId();
-            $article->updateArticleId($aid);
-        }       
-          $awrepo
+            if (isset($arr['id'])) {//update
+                $aid = $arr['id'];
+            } else {//insert
+                $this->saveArticle($article);
+                $aid = $this->_em->getConnection()->lastInsertId();
+                $article->updateArticleId($aid);
+            }
+            $res  = $this->getEntityManager()->getRepository(ArticleWord::class)->saveArticleWords($article->getWords());
             $this->_em->getConnection()->commit();
         } catch (Exception $e) {
             //An exception has occured, which means that one of our database queries
