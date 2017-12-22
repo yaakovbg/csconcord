@@ -17,6 +17,7 @@ class Article {
     /**
      * @var string
      * @Serializer\Type("string")
+     * @Serializer\Groups({"Atom"})
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
     private $title;
@@ -24,6 +25,7 @@ class Article {
     /**
      * @var string
      * @Serializer\Type("string")
+     * @Serializer\Groups({"Atom"})
      * @ORM\Column(name="topic", type="string", length=100, nullable=false)
      */
     private $topic;
@@ -31,6 +33,7 @@ class Article {
     /**
      * @var string
      *  @Serializer\Type("string")
+     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -38,6 +41,7 @@ class Article {
     /**
      * @var string
      * @Serializer\Type("string")
+     * @Serializer\Groups({"Atom"})
      * @ORM\Column(name="filepath", type="string", length=512, nullable=false)
      */
     private $filepath = '';
@@ -46,6 +50,7 @@ class Article {
      * @var integer
      * 
      * @Serializer\Type("integer")
+     * @Serializer\Groups({"Atom"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -54,6 +59,7 @@ class Article {
 
     /**
      * 
+     * @Serializer\Groups({"List"})
      * @Serializer\XmlList(inline=false, entry="articleWord")
      * @Serializer\Type("array<AppBundle\Entity\ArticleWord>")
      * @ORM\OneToMany(targetEntity="ArticleWord", mappedBy="article")
@@ -61,7 +67,7 @@ class Article {
     private $words;
 
     /**
-     * 
+     * @Serializer\Groups({"List"})
      * @Serializer\XmlList(inline=false, entry="articleLetter")
      * @Serializer\Type("array<AppBundle\Entity\ArticleLetter>")
      * @ORM\OneToMany(targetEntity="ArticleLetter", mappedBy="article")
@@ -69,8 +75,8 @@ class Article {
     private $letters;
 
     /**
-     * 
-     * @Serializer\XmlList(inline=false, entry="articleParagraphs")
+     * @Serializer\Groups({"List"})
+     * @Serializer\XmlList(inline=false, entry="articleParagraph")
      * @Serializer\Type("array<AppBundle\Entity\ArticleParagraph>")
      * @ORM\OneToMany(targetEntity="ArticleParagraph", mappedBy="article")
      */

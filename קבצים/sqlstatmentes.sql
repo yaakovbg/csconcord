@@ -13,3 +13,6 @@ ORDER BY `articleletter`.`letter`  DESC;
 
 select letter,count(letter) as letter_count from articleletter group by (BINARY letter ) 
 ORDER BY `articleletter`.`letter` ASC
+
+
+select * from `articleword` as a join `articlewordgroup` as b on(a.word = b.word) where b.wgid in ('28')

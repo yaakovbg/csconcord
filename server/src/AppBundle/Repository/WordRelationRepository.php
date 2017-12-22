@@ -86,7 +86,7 @@ class WordRelationRepository extends BaseRepository {
      * @return Boolen
      */
     public function save(Relation $relation) {
-        $arr = $this->serializeArr($relation);
+        $arr = $this->serializeArr($relation,'Atom');
         $this->_em->getConnection()->beginTransaction();
        
         try {
@@ -112,6 +112,7 @@ class WordRelationRepository extends BaseRepository {
             ));   
          
             foreach ($relation->getTuples() as $k => $v) {
+               $v = $this->serializeArr($v);
                if(isset($v['word_a']) && isset($v['word_b'])){
                     $params[] = $v['word_a'];
                     $params[] = $v['word_b'];

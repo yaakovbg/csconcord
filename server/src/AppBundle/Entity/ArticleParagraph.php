@@ -29,30 +29,36 @@ class ArticleParagraph {
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
+   
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
+     * @ORM\Column(name="articleNunmer", type="integer", length=13)
+     */
+    private $articleNunmer;
+    /**
+     * @var integer
+     * @Serializer\Type("integer")
      * @ORM\Column(name="beginning", type="integer", length=13)
      */
     private $beginning;
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="end", type="integer", length=13)
      */
     private $end;
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="articleid", type="integer", length=13)
      */
     private $articleid;
@@ -110,7 +116,7 @@ class ArticleParagraph {
      * @param Integer $pos
      */
     public function setEnd($pos) {
-        $this->end = $context;
+        $this->end = $pos;
     }
 
     /**
@@ -118,6 +124,21 @@ class ArticleParagraph {
      */
     public function getEnd() {
         return $this->end;
+    }
+    /**
+     * Sets word.
+     *
+     * @param Integer $pos
+     */
+    public function setArticleNunmer($pos) {
+        $this->articleNunmer = $pos;
+    }
+
+    /**
+     * @return Integer end position of paragraph
+     */
+    public function getArticleNunmer() {
+        return $this->articleNunmer;
     }
 
 }

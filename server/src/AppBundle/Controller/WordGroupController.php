@@ -45,10 +45,11 @@ class WordGroupController extends FOSRestController {
         $form = $this->createForm(WordGroupForm::class, $wordgroup);
         $form->submit($data);
         $d = $form->getData();
+
         $res = $wordGroupRepo->save($d);
 
-        // $wordgroup->setWords($data['words']);
-        // $d=$wordgroup;
+//        $wordgroup->setWords($data['words']);
+//        $d = $wordgroup;
         //return array('form'=>$d,'data'=>$data);
         return array('result' => $res);
     }
@@ -64,8 +65,8 @@ class WordGroupController extends FOSRestController {
         $d = $form->getData();
         $valid = $form->isValid();
         if ($valid) {
-             $wordGroupRepo = $this->getDoctrine()->getRepository(WordGroup::class);
-             $res = $wordGroupRepo->delete($d);
+            $wordGroupRepo = $this->getDoctrine()->getRepository(WordGroup::class);
+            $res = $wordGroupRepo->delete($d);
         } else {
             $res = $form->getErrors(true, false);
         }

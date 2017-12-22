@@ -177,12 +177,20 @@ class ArticleController extends FOSRestController {
         $serializer = SerializerBuilder::create()->build();
         $g = $serializer->deserialize($data, GlobalHolder::class, 'xml');
         
-        $repo= $this->getDoctrine()->getRepository(Article::class);
+        $repo= $this->getDoctrine()->getRepository(Article::class);        
+        $wgrepo= $this->getDoctrine()->getRepository(WordGroup::class);        
+        $relrepo= $this->getDoctrine()->getRepository(WordRelation::class);   
         
         foreach($g->articles as $k=>$article){
             $repo->importSaveArticle($article);
         }
-        return '';
+        foreach($g->wordGroups as $k=>$wg){
+            $wgrepo->save($wg);
+        }
+        foreach($g->relations as $k=>$relation){
+            $relrepo->save($relation);
+        }
+        return $g;
     }
 
 }

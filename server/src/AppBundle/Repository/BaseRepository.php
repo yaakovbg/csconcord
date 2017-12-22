@@ -8,6 +8,7 @@
 namespace AppBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializationContext;
 
 class BaseRepository extends EntityRepository
 {
@@ -42,18 +43,31 @@ class BaseRepository extends EntityRepository
      * @param $obj
      * @return mixed
      */
-    protected function serializeArr($obj) {
+    protected function serializeArr($obj,$group=false) {
+        $context=null;
+        if($group!==false){
+            $context = new SerializationContext();
+            $groups = array($group);
+            $context->setGroups($groups);
+        }
         $serializer = SerializerBuilder::create()->build();
-        $res = $serializer->toArray($obj);
+        $res = $serializer->toArray($obj,$context);
         return $res;
     }
+    
      /**
      * @param $obj
      * @return mixed
      */
-    protected function serializeArrParams($obj) {
+    protected function serializeArrParams($obj,$group=false) {
+         $context=null;
+         if($group!==false){
+            $context = new SerializationContext();
+            $groups = array($group);
+            $context->setGroups($groups);
+        }
         $serializer = SerializerBuilder::create()->build();
-        $arr = $serializer->toArray($obj);
+        $arr = $serializer->toArray($obj,$context);
         $res=array();
         foreach ($arr as $k=>$v){
             $res[':'.$k]=$v;

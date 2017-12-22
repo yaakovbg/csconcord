@@ -29,7 +29,7 @@ class ArticleLetter {
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -38,26 +38,25 @@ class ArticleLetter {
 
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="position", type="integer", length=13)
      */
     private $position;
 
-   
-
     /**
      * @var integer
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="articleid", type="integer", length=13)
      */
     private $articleid;
 
     /**
      * @var string
-     *
+     * @Serializer\Type("string")
      * @ORM\Column(name="letter", type="string", length=15, nullable=false)
      */
     private $letter;
+
     /**
      * 
      * @Serializer\Type("array<AppBundle\Entity\Article>")
@@ -65,7 +64,6 @@ class ArticleLetter {
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
     private $article;
-   
 
     public function getId() {
         return $this->id;
@@ -105,10 +103,5 @@ class ArticleLetter {
     public function getLetter() {
         return $this->letter;
     }
-
-  
-
-   
-  
 
 }

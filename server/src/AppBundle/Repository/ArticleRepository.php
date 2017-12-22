@@ -25,8 +25,10 @@ class ArticleRepository extends BaseRepository {
      * @return File
      */
     public function saveArticle(Article $article) {
-        $arr = $this->serializeArr($article);
-        $arrParams = $this->serializeArrParams($article);
+        $arr = $this->serializeArr($article,'Atom');
+        
+        $arrParams = $this->serializeArrParams($article,'Atom');
+      
         if (isset($arr['id'])) {//update
             $q = $this->_em->getConnection()->createQueryBuilder();
             $q->update('article');
@@ -38,12 +40,14 @@ class ArticleRepository extends BaseRepository {
             $q->where('id=:id');
             $q->setParameters($arrParams);
             $res = $q->execute();
-        } else//new insert
-            $res = $this->smartQuery(array(
+        } else{//new insert
+               $res = $this->smartQuery(array(
                 'sql' => "insert into `article`(title,topic,filepath) values (:title,:topic,:filepath)",
                 'par' => $arr,
                 'ret' => 'result'
             ));
+        }//new insert
+         
 
 
 
@@ -67,10 +71,11 @@ class ArticleRepository extends BaseRepository {
                 $aid = $this->_em->getConnection()->lastInsertId();
                 $article->updateArticleId($aid);
             }
-            $wordRepo=$this->getEntityManager()->getRepository(ArticleWord::class);
-            $res = $wordRepo->saveArticleWords($article->getWords());
-            $res =$res1 && $wordRepo->saveArticleLetters($article->getLetters());
-            $res1 = $wordRepo->saveArticleParagraphs($article->getParagraphs());
+            $wordRepo = $this->getEntityManager()->getRepository(ArticleWord::class);
+            $res1 = $wordRepo->saveArticleWords($article->getWords());
+            $res2 = $wordRepo->saveArticleLetters($article->getLetters());
+            $res3 = $wordRepo->saveArticleParagraphs($article->getParagraphs());
+            $res = $res1 && $res2 && $res3;
             $this->_em->getConnection()->commit();
         } catch (Exception $e) {
             //An exception has occured, which means that one of our database queries

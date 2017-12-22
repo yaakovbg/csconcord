@@ -48,6 +48,16 @@ class GlobalHolder {
                 $vw->setArticleid(null);
                 $vw->setId(null);
             }
+            $letters = $v->getLetters();
+            foreach ($letters as $kw => $vw) {
+                $vw->setArticleid(null);
+                $vw->setId(null);
+            }
+            $paragraphs = $v->getParagraphs();
+            foreach ($paragraphs as $kw => $vw) {
+                $vw->setArticleid(null);
+                $vw->setId(null);
+            }
             $v->setId(null);
         }
         foreach ($this->wordGroups as $k => $v) {
