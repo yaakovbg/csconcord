@@ -39,9 +39,9 @@ class ArticleParagraph {
     /**
      * @var integer
      * @Serializer\Type("integer")
-     * @ORM\Column(name="articleNunmer", type="integer", length=13)
+     * @ORM\Column(name="paragraphNumber", type="integer", length=13)
      */
-    private $articleNunmer;
+    private $paragraphNumber;
     /**
      * @var integer
      * @Serializer\Type("integer")
@@ -130,15 +130,15 @@ class ArticleParagraph {
      *
      * @param Integer $pos
      */
-    public function setArticleNunmer($pos) {
-        $this->articleNunmer = $pos;
+    public function setParagraphNumber($pos) {
+        $this->paragraphNumber = $pos;
     }
 
     /**
      * @return Integer end position of paragraph
      */
-    public function getArticleNunmer() {
-        return $this->articleNunmer;
+    public function getParagraphNumber() {
+        return $this->paragraphNumber;
     }
 
 }

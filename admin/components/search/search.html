@@ -33,7 +33,27 @@
                                     </label>
                                 </div>
                             </div>
-
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <h2>Filter Options</h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Articles</label>  
+                                    <select class="form-control" multiple ng-model="params.chosenArticles"
+                                            ng-options="option.title for option in articles track by option.id"
+                                           >
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>מספר שורות לעמוד
+                                        <input type="number" class="form-control" ng-model="numPerPage">
+                                    </label>
+                                </div>
+                            </div>
 
                             <div class="col-lg-12">
                                 <pagination total-items="articleWords.total_rows" ng-model="params.page" max-size="maxSize" num-pages="articleWords.numberOfPages" items-per-page="params.numPerPage" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
@@ -50,7 +70,7 @@
                                                 <th>#</th>
 
                                                 <th ng-click="sort('name')" style="cursor:pointer">מילה  <span class="fa fa-angle-down" ng-if="params.order.name == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.name == 'desc'"> </span></th>
-                                               
+
 
                                                 <th ng-click="sort('lastModified')" style="cursor:pointer"> הקשר<span class="fa fa-angle-down" ng-if="params.order.pointsTime == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.pointsTime == 'desc'"> </span></th>
                                             </tr>
@@ -59,7 +79,7 @@
                                             <tr ui-sref="article({aid:data.articleid,search:data.word})"   ng-repeat="data in articleWords.rows" style="cursor: pointer;">
                                                 <td  >{{data.id}}</td>
 
-                                               
+
                                                 <td>{{data.word}}</td>
 
                                                 <td ng-bind-html="trustHtml(data.context)"></td>

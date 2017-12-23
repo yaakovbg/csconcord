@@ -46,7 +46,7 @@ class ArticleController extends FOSRestController {
         $filesDir = $this->container->getParameter('files_directory');
         $fileFullPath = $filesDir . '/' . $article->getFilepath();
         $filecontent = file_get_contents($fileFullPath);
-        // $restresult->fileContent = $filecontent;
+// $restresult->fileContent = $filecontent;
         return array('fileContent' => $filecontent, 'id' => $article->getId(), 'title' => $article->getTitle());
     }
 
@@ -79,7 +79,7 @@ class ArticleController extends FOSRestController {
      * @Rest\Post("/file")
      */
     public function postAction(Request $req, FileUploader $fileUploader) {
-        // print_r($req);
+// print_r($req);
         $file = $req->files->get('file');
 
         $res = $fileUploader->upload($file);
@@ -127,7 +127,7 @@ class ArticleController extends FOSRestController {
         $res = $articleWordrepo->getArticleWords($data);
 
         return $res;
-        //return $filerepo->findAll();
+//return $filerepo->findAll();
     }
 
     /**
@@ -155,17 +155,17 @@ class ArticleController extends FOSRestController {
 
         $relationrepo = $this->getDoctrine()->getRepository(Relation::class);
         $relations = $relationrepo->findAll();
-        //print_r($res);
+//print_r($res);
         $g = new GlobalHolder();
 
         $g->articles = $artilces;
         $g->wordGroups = $wordgroups;
         $g->relations = $relations;
-        
+
         $g->removeIds();
-        
+
         return $g;
-        //return $filerepo->findAll();
+//return $filerepo->findAll();
     }
 
     /**
@@ -176,21 +176,30 @@ class ArticleController extends FOSRestController {
         $data = $fileUploader->read($file);
         $serializer = SerializerBuilder::create()->build();
         $g = $serializer->deserialize($data, GlobalHolder::class, 'xml');
-        
-        $repo= $this->getDoctrine()->getRepository(Article::class);        
-        $wgrepo= $this->getDoctrine()->getRepository(WordGroup::class);        
-        $relrepo= $this->getDoctrine()->getRepository(WordRelation::class);   
-        
-        foreach($g->articles as $k=>$article){
+
+        $repo = $this->getDoctrine()->getRepository(Article::class);
+        $wgrepo = $this->getDoctrine()->getRepository(WordGroup::class);
+        $relrepo = $this->getDoctrine()->getRepository(WordRelation::class);
+
+        foreach ($g->articles as $k => $article) {
             $repo->importSaveArticle($article);
         }
-        foreach($g->wordGroups as $k=>$wg){
+        foreach ($g->wordGroups as $k => $wg) {
             $wgrepo->save($wg);
         }
-        foreach($g->relations as $k=>$relation){
+        foreach ($g->relations as $k => $relation) {
             $relrepo->save($relation);
         }
         return $g;
+    }
+
+    /**
+     * @Rest\Get("/articlesForFilter")
+     */
+    public function articlesForFilter(Request $req) {
+        $repo = $this->getDoctrine()->getRepository(Article::class);
+        $articles= $repo->findAllWithOutWords();
+        return $articles;
     }
 
 }

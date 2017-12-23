@@ -48,10 +48,11 @@ class FileAnalyzer {
         $this->letterMap = new stdClass();
         $this->wordsData = array();
         $this->paragraphsData = array();
-
+        
+        $this->mapParagrphs();      
         $this->mapWords();
         $this->mapLetters();
-        $this->mapParagrphs();
+        
         return $this->save();
     }
 
@@ -101,10 +102,12 @@ class FileAnalyzer {
     function mapParagrphs() {
         $this->paragraphs = explode("\r\n\r\n", $this->originalContent);
         $start = 0;
+        $count = 1;
         foreach ($this->paragraphs as $k => $paragraph) {
-            $artilceLetter = new ArticleParagraph((object) array('beginning' => $start, 'end' => $start + strlen($paragraph), 'articleid' => $this->articleId));
+            $artilceLetter = new ArticleParagraph((object) array('beginning' => $start, 'end' => $start + strlen($paragraph), 'articleid' => $this->articleId, 'paragraphNumber' => $count));
             $this->paragraphsData[] = $artilceLetter;
             $start = $start + strlen($paragraph) + strlen("\r\n\r\n");
+            $count++;
         }
     }
 
@@ -113,7 +116,7 @@ class FileAnalyzer {
         $res1 = $articleWordrepo->saveArticleWords($this->wordsData);
         $res2 = $articleWordrepo->saveArticleLetters($this->lettersData);
         $res3 = $articleWordrepo->saveArticleParagraphs($this->paragraphsData);
-        return $res1 && $res2 &&  $res3 ;
+        return $res1 && $res2 && $res3;
     }
 
     function getWordsData() {

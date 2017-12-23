@@ -25,10 +25,10 @@ class ArticleRepository extends BaseRepository {
      * @return File
      */
     public function saveArticle(Article $article) {
-        $arr = $this->serializeArr($article,'Atom');
-        
-        $arrParams = $this->serializeArrParams($article,'Atom');
-      
+        $arr = $this->serializeArr($article, 'Atom');
+
+        $arrParams = $this->serializeArrParams($article, 'Atom');
+
         if (isset($arr['id'])) {//update
             $q = $this->_em->getConnection()->createQueryBuilder();
             $q->update('article');
@@ -40,14 +40,14 @@ class ArticleRepository extends BaseRepository {
             $q->where('id=:id');
             $q->setParameters($arrParams);
             $res = $q->execute();
-        } else{//new insert
-               $res = $this->smartQuery(array(
+        } else {//new insert
+            $res = $this->smartQuery(array(
                 'sql' => "insert into `article`(title,topic,filepath) values (:title,:topic,:filepath)",
                 'par' => $arr,
                 'ret' => 'result'
             ));
         }//new insert
-         
+
 
 
 
@@ -90,6 +90,21 @@ class ArticleRepository extends BaseRepository {
     }
 
     /**
+     * 
+     * @return array<Article>
+     */
+    public function findAllWithOutWords() {
+        $articles = $this->smartQuery(array(
+            'sql' => "select * from article",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        $res = $this->deserializeArrs($articles, Article::class);
+        
+        return $res;
+    }
+
+    /**
      * @param $articleId
      * @return Boolean
      */
@@ -97,7 +112,7 @@ class ArticleRepository extends BaseRepository {
         $q = $this->_em->getConnection()->createQueryBuilder();
         $q->delete('article')->where('article.id=:aid')->setParameter('aid', $articleId);
         $res = $q->execute();
-        // $q->get
+        
         return $res;
     }
 

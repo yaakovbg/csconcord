@@ -92,7 +92,7 @@ class ArticleWordRepository extends BaseRepository {
         $dataVals = $this->serializeArr($articleparagraphs);
 
         $dataToInsert = array();
-        $colNames = array('beginning', 'end', 'articleid');
+        $colNames = array('paragraphNumber', 'beginning', 'end', 'articleid');
         foreach ($dataVals as $row => $data) {
             foreach ($data as $val) {
                 $dataToInsert[] = $val;
@@ -122,16 +122,32 @@ class ArticleWordRepository extends BaseRepository {
         $search = (isset($params->search) && $params->search != '') ? $params->search : false;
         $page = (isset($params->page) && $params->page != '') ? $params->page : false;
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
+        $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $where = '';
         $limit = '';
+        $whereArray = [];
         if ($search !== false) {
             $paramArr['search'] = "%$search%";
-            $where = "where word like :search";
+            $searchWhere = "word like :search";
+            $whereArray[] = $searchWhere;
+        }
+        if ($articlesFilter !== false) {
+            $whereArticles = 'articleid in (:articles)';
+            $articles = array();
+            foreach ($articlesFilter as $article) {
+                $articles[] = $article->id;
+            }
+            $paramArr['articles'] = $articles;
+            $whereArray[] = $whereArticles;
+        }
+        if(sizeof($whereArray)>0){
+            $where ="where ". implode(" and ", $whereArray);
         }
         if ($page !== false && $numperpage !== false) {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
+        print_r($paramArr);
         $res = $this->smartQuery(array(
             'sql' => "select * from `articleword` $where $limit",
             'par' => $paramArr,
