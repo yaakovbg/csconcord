@@ -132,12 +132,18 @@ class ArticleWordRepository extends BaseRepository {
             $whereArray[] = $searchWhere;
         }
         if ($articlesFilter !== false) {
-            $whereArticles = 'articleid in (:articles)';
-            $articles = array();
+            $articlesSigns="";
+           
+            $arcout=1;
             foreach ($articlesFilter as $article) {
-                $articles[] = $article->id;
+                
+                if($arcout>1) $articlesSigns.=",";
+                $articlesSigns.=":ar".$arcout;
+                $paramArr["ar".$arcout] = $article->id;
+                $arcout++;
             }
-            $paramArr['articles'] = $articles;
+            $whereArticles = "articleid in ($articlesSigns)";
+            
             $whereArray[] = $whereArticles;
         }
         if(sizeof($whereArray)>0){
@@ -147,7 +153,7 @@ class ArticleWordRepository extends BaseRepository {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
-        print_r($paramArr);
+        
         $res = $this->smartQuery(array(
             'sql' => "select * from `articleword` $where $limit",
             'par' => $paramArr,
