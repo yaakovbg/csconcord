@@ -123,44 +123,62 @@ class ArticleWordRepository extends BaseRepository {
         $page = (isset($params->page) && $params->page != '') ? $params->page : false;
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
+        $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
         $where = '';
         $limit = '';
+        $join = " join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` ) ";
         $whereArray = [];
         if ($search !== false) {
             $paramArr['search'] = "%$search%";
-            $searchWhere = "word like :search";
+            $searchWhere = "`articleword`.word like :search";
             $whereArray[] = $searchWhere;
         }
         if ($articlesFilter !== false) {
-            $articlesSigns="";
-           
-            $arcout=1;
+            $articlesSigns = "";
+            $arcount = 1;
             foreach ($articlesFilter as $article) {
-                
-                if($arcout>1) $articlesSigns.=",";
-                $articlesSigns.=":ar".$arcout;
-                $paramArr["ar".$arcout] = $article->id;
-                $arcout++;
+
+                if ($arcount > 1)
+                    $articlesSigns .= ",";
+                $articlesSigns .= ":ar" . $arcount;
+                $paramArr["ar" . $arcount] = $article->id;
+                $arcount++;
             }
             $whereArticles = "articleid in ($articlesSigns)";
-            
+
             $whereArray[] = $whereArticles;
         }
-        if(sizeof($whereArray)>0){
-            $where ="where ". implode(" and ", $whereArray);
+        if ($groupsFilter !== false) {
+            $join.=" left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $groupsSigns = "";
+            $grcount = 1;
+            foreach ($groupsFilter as $group) {
+
+                if ($grcount > 1)
+                    $groupsSigns .= ",";
+                $groupsSigns .= ":gr" . $grcount;
+                $paramArr["gr" . $grcount] = $group->id;
+                $grcount++;
+            }
+            $whereArticles = "`articlewordgroup`.wgid in ($groupsSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
+        if (sizeof($whereArray) > 0) {
+            $where = "where " . implode(" and ", $whereArray);
         }
         if ($page !== false && $numperpage !== false) {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
-        
+
         $res = $this->smartQuery(array(
-            'sql' => "select * from `articleword` $where $limit",
+            'sql' => "select distinct articleword.*,`articleparagraph`.`paragraphNumber` FROM `articleword` $join $where $limit",
             'par' => $paramArr,
             'ret' => 'all'
         ));
         $count = $this->smartQuery(array(
-            'sql' => "select count(*) as total_rows from `articleword` $where",
+            'sql' => "select count(distinct `articleword`.id) as total_rows FROM `articleword` $join $where",
             'par' => $paramArr,
             'ret' => 'fetch-assoc'
         ));

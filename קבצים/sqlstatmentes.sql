@@ -16,3 +16,8 @@ ORDER BY `articleletter`.`letter` ASC
 
 
 select * from `articleword` as a join `articlewordgroup` as b on(a.word = b.word) where b.wgid in ('28')
+
+select distinct articleword.*,`articleparagraph`.`paragraphNumber` FROM `articleword` join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` )
+
+select distinct articleword.*,`articleparagraph`.`paragraphNumber` FROM `articleword` join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` )    
+ORDER BY  articleword.articleid,`articleparagraph`.`paragraphNumber`,`articleword`.`wordPosition` ASC

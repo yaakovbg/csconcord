@@ -49,6 +49,19 @@ class WordGroupRepository extends BaseRepository {
     }
 
     /**
+     * returns all word groups
+     * @return array all word groups
+     */
+    public function getAllWordGroupsWithOutWords() {
+        $wordgroups = $this->smartQuery(array(
+            'sql' => "select * from `wordgroup`",
+            'par' => array(),
+            'ret' => 'all'
+        ));
+        return $wordgroups;
+    }
+
+    /**
      *      deletes given word group
      * @param Integer $wgid
      * @return Boolen
@@ -110,7 +123,7 @@ class WordGroupRepository extends BaseRepository {
                 'par' => array('wgid' => $wgid),
                 'ret' => 'result'
             ));
-          
+
             foreach ($wordGroup->getWords() as $k => $v) {
                 $v = $this->serializeArr($v);
                 if (isset($v['word'])) {

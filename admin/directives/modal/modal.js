@@ -90,7 +90,7 @@ admin.directive('modalWordgroup', ['$rootScope', '$http', '$q', function ($rootS
                 scope.getWords = function () {
                     canceller.resolve();
                     canceller = $q.defer();
-                    $http({method: 'POST', url: '../server/articlewords', data: scope.params, timeout: canceller.promise}).
+                    $http({method: 'POST', url: '../server/distinctWords', data: scope.params, timeout: canceller.promise}).
                             success(function (data, status, headers, config) {
                                 scope.words = data;
                             });
@@ -164,7 +164,7 @@ admin.directive('modalWordrelation', ['$rootScope', '$http', '$q', function ($ro
                 scope.getWords = function () {
                     canceller.resolve();
                     canceller = $q.defer();
-                    $http({method: 'POST', url: '../server/articlewords', data: scope.params, timeout: canceller.promise}).
+                    $http({method: 'POST', url: '../server/distinctWords', data: scope.params, timeout: canceller.promise}).
                             success(function (data, status, headers, config) {
                                 scope.words = data;
                             });

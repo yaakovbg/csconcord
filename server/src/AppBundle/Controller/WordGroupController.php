@@ -32,7 +32,15 @@ class WordGroupController extends FOSRestController {
 
         return $data;
     }
+/**
+     * @Rest\Get("/wordGroupsForFilter")
+     */
+    public function getWordGroupsForFilter() {
+        $filerepo = $this->getDoctrine()->getRepository(WordGroup::class);
+        $data = $filerepo->getAllWordGroupsWithOutWords();
 
+        return $data;
+    }
     /**
      * @Rest\Post("/wordGroup")
      */

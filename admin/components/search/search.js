@@ -6,17 +6,20 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         var initSearch = ($stateParams.search) ? $stateParams.search : '';
         $scope.params = {page: 1, numPerPage: 25, order: {}, search: initSearch};
         $scope.articles=[];
-        $scope.getArticlesForFilter = function () {
+        $scope.groups=[];
+        $scope.getFilterData = function () {
             canceller.resolve();
             canceller = $q.defer();
             $http({method: 'GET', url: '../server/articlesForFilter'}).
                     success(function (data, status, headers, config) {
                         $scope.articles = data;
-
-
+                    });
+            $http({method: 'GET', url: '../server/wordGroupsForFilter'}).
+                    success(function (data, status, headers, config) {
+                        $scope.groups = data;
                     });
         }
-        $scope.getArticlesForFilter();
+        $scope.getFilterData();
         $scope.getData = function () {
             canceller.resolve();
             canceller = $q.defer();

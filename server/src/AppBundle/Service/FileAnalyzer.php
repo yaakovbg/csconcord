@@ -39,7 +39,8 @@ class FileAnalyzer {
 
         $this->originalContent = file_get_contents($this->filePath);
 
-        $this->manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", "", $this->originalContent);
+        $this->manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", " ", $this->originalContent);
+        $this->manipulatedContent = str_replace("\r\n\r\n", " ", $this->manipulatedContent);
         $this->manipulatedContent = str_replace("\n", " ", $this->manipulatedContent);
         $this->words = explode(" ", $this->manipulatedContent);
         $this->letters = str_split($this->originalContent);
@@ -55,42 +56,53 @@ class FileAnalyzer {
         
         return $this->save();
     }
-
-    private function mapWords() {
-        foreach ($this->words as $k => $word) {
-            if ($word !== "") {
-                if (!(isset($this->wordMap->{$word}))) {
-                    $wordPosition = array($k);
-                    $this->wordMap->{$word} = (object) array('count' => 1, 'wordPosition' => $wordPosition);
-                } else {
-                    $this->wordMap->{$word}->wordPosition[] = $k;
-                    $this->wordMap->{$word}->count++;
-                }
-            }
-        }
-        foreach ($this->wordMap as $k => $v) {
-            $lastpos = 0;
-            for ($i = 0; $i < $v->count; $i++) {
-                $wordPosition = $v->wordPosition[$i];
-                $newpos = strpos($this->originalContent, $k, $lastpos);
-                $lastpos = $newpos + strlen($k);
-                if (($newpos - 75) > 0) {
-                    $wordContext = substr($this->originalContent, $newpos - 75);
-                    $spacepos = strpos($wordContext, " ");
-                } else {
-                    $wordContext = $this->originalContent;
-                    $spacepos = -1;
-                }
-
-                $wordContext = substr($wordContext, $spacepos + 1);
-                if (150 < strlen($wordContext))
-                    $wordContext = substr($wordContext, 0, 150);
-                $wordContext = str_replace($k, '<b>' . $k . '</b>', $wordContext);
-                $artilceWord = new ArticleWord((object) array('word' => $k, 'position' => $newpos, 'context' => $wordContext, 'wordPosition' => $wordPosition, 'articleid' => $this->articleId));
-                $this->wordsData[] = $artilceWord;
+    private function  mapWords() {
+        foreach ($this->paragraphs as $k => $paragraph) {
+            $paragraphsData = $this->paragraphsData[$k];
+            $manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", " ", $paragraph);
+            $manipulatedContent = str_replace("\r\n\r\n", " ", $manipulatedContent);
+            $manipulatedContent = str_replace("\n", " ", $manipulatedContent);
+            $wordsArr = explode(" ", $manipulatedContent);
+            foreach($wordsArr as $wordPos=>$word){
+                
             }
         }
     }
+//    private function mapWords() {
+//        foreach ($this->words as $k => $word) {
+//            if ($word !== "") {
+//                if (!(isset($this->wordMap->{$word}))) {
+//                    $wordPosition = array($k);
+//                    $this->wordMap->{$word} = (object) array('count' => 1, 'wordPosition' => $wordPosition);
+//                } else {
+//                    $this->wordMap->{$word}->wordPosition[] = $k;
+//                    $this->wordMap->{$word}->count++;
+//                }
+//            }
+//        }
+//        foreach ($this->wordMap as $k => $v) {
+//            $lastpos = 0;
+//            for ($i = 0; $i < $v->count; $i++) {
+//                $wordPosition = $v->wordPosition[$i];
+//                $newpos = strpos($this->originalContent, $k, $lastpos);
+//                $lastpos = $newpos + strlen($k);
+//                if (($newpos - 75) > 0) {
+//                    $wordContext = substr($this->originalContent, $newpos - 75);
+//                    $spacepos = strpos($wordContext, " ");
+//                } else {
+//                    $wordContext = $this->originalContent;
+//                    $spacepos = -1;
+//                }
+//
+//                $wordContext = substr($wordContext, $spacepos + 1);
+//                if (150 < strlen($wordContext))
+//                    $wordContext = substr($wordContext, 0, 150);
+//                $wordContext = str_replace($k, '<b>' . $k . '</b>', $wordContext);
+//                $artilceWord = new ArticleWord((object) array('word' => $k, 'position' => $newpos, 'context' => $wordContext, 'wordPosition' => $wordPosition, 'articleid' => $this->articleId));
+//                $this->wordsData[] = $artilceWord;
+//            }
+//        }
+//    }
 
     function mapLetters() {
         foreach ($this->letters as $k => $letter) {
