@@ -7,12 +7,16 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.params = {page: 1, numPerPage: 25, order: {}, search: initSearch};
         $scope.articles=[];
         $scope.groups=[];
+        $scope.articlesMap={};
         $scope.getFilterData = function () {
             canceller.resolve();
             canceller = $q.defer();
             $http({method: 'GET', url: '../server/articlesForFilter'}).
                     success(function (data, status, headers, config) {
                         $scope.articles = data;
+                        $scope.articles.forEach(function(article){
+                            $scope.articlesMap[article.id] = article;
+                        })
                     });
             $http({method: 'GET', url: '../server/wordGroupsForFilter'}).
                     success(function (data, status, headers, config) {

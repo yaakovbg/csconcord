@@ -22,9 +22,8 @@ class ArticleWordRepository extends BaseRepository {
      */
     public function saveArticleWords($articlewords) {
         $dataVals = $this->serializeArr($articlewords);
-
         $dataToInsert = array();
-        $colNames = array('position', 'wordPosition', 'articleid', 'word', 'context');
+        $colNames = array('position', 'wordPosition','paragraphWordPosition','paragraphNumber', 'articleid', 'word', 'context');
         foreach ($dataVals as $row => $data) {
             foreach ($data as $val) {
                 $dataToInsert[] = $val;
@@ -126,7 +125,8 @@ class ArticleWordRepository extends BaseRepository {
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
         $where = '';
         $limit = '';
-        $join = " join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` ) ";
+        //$join = " join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` ) ";
+        $join = "";
         $whereArray = [];
         if ($search !== false) {
             $paramArr['search'] = "%$search%";
@@ -173,7 +173,7 @@ class ArticleWordRepository extends BaseRepository {
         }
 
         $res = $this->smartQuery(array(
-            'sql' => "select distinct articleword.*,`articleparagraph`.`paragraphNumber` FROM `articleword` $join $where $limit",
+            'sql' => "select distinct articleword.* FROM `articleword` $join $where $limit",
             'par' => $paramArr,
             'ret' => 'all'
         ));

@@ -43,6 +43,7 @@ class ArticleWord {
      */
     private $position;
 
+
     /**
      * @var integer
      * @Serializer\Type("integer")
@@ -50,7 +51,23 @@ class ArticleWord {
      * @ORM\Column(name="wordPosition", type="integer", length=13)
      */
     private $wordPosition;
+   
 
+
+    /**
+     * @var integer
+     * @Serializer\Type("integer")
+     * 
+     * @ORM\Column(name="paragraphWordPosition", type="integer", length=13)
+     */
+    private $paragraphWordPosition;
+    /**
+     * @var integer
+     * @Serializer\Type("integer")
+     * 
+     * @ORM\Column(name="paragraphNumber", type="integer", length=13)
+     */
+    private $paragraphNumber;
     /**
      * @var integer
      *  @Serializer\Type("integer")
@@ -159,6 +176,38 @@ class ArticleWord {
      */
     public function getWordPosition() {
         return $this->wordPosition;
+    }
+    /**
+     * Sets position.
+     *
+     * @param integer $position
+     */
+    public function setParagraphWordPosition($position) {
+        $this->paragraphWordPosition = $position;
+    }
+
+    /**
+     * 
+     * @return Iteger word positionn in file by words
+     */
+    public function getParagraphWordPosition() {
+        return $this->paragraphWordPosition;
+    }
+    /**
+     * Sets pargraph position.
+     *
+     * @param integer $number
+     */
+    public function setParagraphNumber($number) {
+        $this->paragraphNumber = $number;
+    }
+
+    /**
+     * 
+     * @return Iteger pargraph positionn in file by words
+     */
+    public function getParagraphNumber() {
+        return $this->paragraphNumber;
     }
 
 }
