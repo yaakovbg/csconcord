@@ -4,7 +4,7 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.maxSize = 5;
         $scope.numPerPage = 25;
         var initSearch = ($stateParams.search) ? $stateParams.search : '';
-        $scope.params = {page: 1, numPerPage: 25, order: {}, search: initSearch};
+        $scope.params = {page: 1, numPerPage: 25, sort: {"word":"ASC"}, search: initSearch};
         $scope.articles=[];
         $scope.groups=[];
         $scope.articlesMap={};
@@ -44,5 +44,14 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.$watch('params', function () {
             $scope.getData();
         }, true)
-
+        $scope.sort=function(columnName){
+            if($scope.params.sort && columnName in $scope.params.sort){
+                var dir = $scope.params.sort[columnName];
+                var newDir=(dir === 'ASC')?'DESC':'ASC';
+                $scope.params.sort[columnName]=newDir;
+            }else{
+                 $scope.params.sort={};
+                 $scope.params.sort[columnName]='ASC';
+            }
+        }
     }]);

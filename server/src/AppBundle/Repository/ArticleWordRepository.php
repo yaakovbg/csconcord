@@ -23,7 +23,7 @@ class ArticleWordRepository extends BaseRepository {
     public function saveArticleWords($articlewords) {
         $dataVals = $this->serializeArr($articlewords);
         $dataToInsert = array();
-        $colNames = array('position', 'wordPosition','paragraphWordPosition','paragraphNumber', 'articleid', 'word', 'context');
+        $colNames = array('position', 'wordPosition', 'paragraphWordPosition', 'paragraphNumber', 'articleid', 'word', 'context');
         foreach ($dataVals as $row => $data) {
             foreach ($data as $val) {
                 $dataToInsert[] = $val;
@@ -123,11 +123,31 @@ class ArticleWordRepository extends BaseRepository {
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        $sortBy = (isset($params->sort) && $params->sort != '' && sizeof($params->sort) > 0) ? $params->sort : false;
         $where = '';
         $limit = '';
+        $orderby = '';
         //$join = " join `articleparagraph` on(`articleword`.`articleid`=`articleparagraph`.`articleid` and `articleword`.`position`<=`articleparagraph`.`end` and `articleword`.`position`>=`articleparagraph`.`beginning` ) ";
         $join = "";
         $whereArray = [];
+        if ($sortBy !== false) {
+            $orderstr = '';
+            $count = 0;
+            foreach ($sortBy as $k => $v) {
+                if ($orderstr !== '') {
+                    $orderstr .= ',';
+                }
+                $orderstr.=" $k $v";
+                //$orderstr .= " :orderby$count :orderbydir$count ";
+                //$paramArr["orderby$count"] = $k;
+                //$paramArr["orderbydir$count"] = $v;
+            }
+            $orderby = ' order by '.$orderstr;
+//             $orderby  = ' order 
+            //print_r($sortBy);
+//             $orderby  = ' order by :orderby :orderdir';
+//             $paramArr['orderby'] = $sortBy;
+        }
         if ($search !== false) {
             $paramArr['search'] = "%$search%";
             $searchWhere = "`articleword`.word like :search";
@@ -149,7 +169,7 @@ class ArticleWordRepository extends BaseRepository {
             $whereArray[] = $whereArticles;
         }
         if ($groupsFilter !== false) {
-            $join.=" left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $join .= " left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
             $groupsSigns = "";
             $grcount = 1;
             foreach ($groupsFilter as $group) {
@@ -171,9 +191,9 @@ class ArticleWordRepository extends BaseRepository {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
-
+        
         $res = $this->smartQuery(array(
-            'sql' => "select distinct articleword.* FROM `articleword` $join $where $limit",
+            'sql' => "select distinct articleword.* FROM `articleword` $join $where $orderby $limit",
             'par' => $paramArr,
             'ret' => 'all'
         ));
