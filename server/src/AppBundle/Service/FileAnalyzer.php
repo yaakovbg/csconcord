@@ -86,8 +86,14 @@ class FileAnalyzer {
                     }
 
                     $wordContext = substr($wordContext, $spacepos + 1);
-                    if (150 < strlen($wordContext))
-                        $wordContext = substr($wordContext, 0, 150);
+                    if (150 < strlen($wordContext)){
+                         $wordContext = substr($wordContext, 0, 150);
+                         $spacepos = strrpos($wordContext, " ");
+                         if($spacepos!==false){
+                              $wordContext= substr($wordContext, 0, $spacepos);
+                         }
+                    }
+                       
                     $wordContext = str_replace($word, '<b>' . $word . '</b>', $wordContext);
                     $paragraphNumber = $paragraphsData->getParagraphNumber();
                     $artilceWord = new ArticleWord((object) array('word' => $word, 'position' => $newpos, 'context' => $wordContext, 'wordPosition' => $wordPosition, 'paragraphWordPosition' => $wordcount, 'articleid' => $this->articleId, 'paragraphNumber' => $paragraphNumber));

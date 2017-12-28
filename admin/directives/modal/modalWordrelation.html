@@ -4,22 +4,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close closemodal" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">יחס</h4>
+                    <h4 class="modal-title">Add relation</h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger" ng-if="hasError">
-                        נא למלא את כל השדות
+                        Please fill all required fields
                     </div>     
                     <div class="form-group">
-                        <p class="help-block">שם היחס</p>
+                        <p class="help-block">Relation name:</p>
                         <input type='text' class="form-control" ng-model="$parent.ngModel.name" placeholder="שם הקבוצה">
                     </div>
                     <div class="panel panel-default" ng-init="$parent.ngModel.tuples = ($parent.ngModel.tuples) ? $parent.ngModel.tuples : []">
                         <div class="panel-heading">
-                            זוגות המתאימים ליחס
+                            Relation tuples
                         </div> 
                         <div class="panel-body" ng-init="data.pointer = false;data.wpointer = ''">
-                            <button class="btn btn-info" ng-click="$parent.ngModel.tuples.push({})">הוסף זוג סדור</button>
+                            <button class="btn btn-info" ng-click="$parent.ngModel.tuples.push({})">Add Tuple</button>
                            
                             <span type="button"  class="btn btn-default" ng-repeat="tuple in $parent.ngModel.tuples">
                                 <span type="button" ng-click="data.pointer = tuple;data.wpointer = 'word_a';">
@@ -38,7 +38,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="list-group">
-                                    <p class="help-block" ng-if="words.rows.length === 0">אין תוצאות לחיפוש</p>
+                                    <p class="help-block" ng-if="words.rows.length === 0">No Search Results</p>
                                     <a role='button' class="list-group-item" ng-repeat="worddata in words.rows" ng-click="(data.pointer !== false) ? (data.pointer[data.wpointer] = worddata.word) : ''"> 
                                         <i class="fa fa-text-width fa-fw"></i> 
                                         {{worddata.word}}
@@ -51,7 +51,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary closemodal" ng-click="confirm()">אישור</button>
+                    <button type="button" class="btn btn-primary closemodal" ng-click="confirm()">Confirm</button>
                 </div>
             </div>
             <div class="modal-load" ng-if="modalLoad"></div>
