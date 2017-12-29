@@ -76,19 +76,19 @@
                                 <div class="table-responsive">
 
 
-                                       {{params.sort}}
+                                       
                                     <table class="table table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
                                                   
-                                                <th ng-click="sort('word')" style="cursor:pointer">Word  <span class="fa fa-angle-down" ng-if="'word' in params.sort &&  params.sort.word== 'ASC'"> </span><span class="fa fa-angle-up" ng-if="'word' in params.sort &&  params.sort.word== 'DESC'"> </span></th>
+                                                <th ng-click="sort('word')" style="cursor:pointer">Word  <span class="fa fa-angle-down" ng-if="params.sort.word== 'ASC'"> </span><span class="fa fa-angle-up" ng-if="params.sort.word== 'DESC'"> </span></th>
 
 
-                                                <th  style="cursor:pointer"> Context<span class="fa fa-angle-down" ng-if="params.order.pointsTime == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.pointsTime == 'desc'"> </span></th>
-                                                <th  style="cursor:pointer"> Article<span class="fa fa-angle-down" ng-if="params.order.pointsTime == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.pointsTime == 'desc'"> </span></th>
-                                                <th  style="cursor:pointer"> Paragraph<span class="fa fa-angle-down" ng-if="params.order.pointsTime == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.pointsTime == 'desc'"> </span></th>
-                                                <th  style="cursor:pointer"> Position<span class="fa fa-angle-down" ng-if="params.order.pointsTime == 'asc'"> </span><span class="fa fa-angle-up" ng-if="params.order.pointsTime == 'desc'"> </span></th>
+                                                <th  style="cursor:pointer"> Context</th>
+                                                <th ng-click="sort('articleid')" style="cursor:pointer"> Article<span class="fa fa-angle-down" ng-if="(params.sort.articleid== 'ASC')"> </span><span class="fa fa-angle-up" ng-if="params.sort.articleid == 'DESC'"> </span></th>
+                                                <th ng-click="sort('paragraphNumber')" style="cursor:pointer"> Paragraph<span class="fa fa-angle-down" ng-if="params.sort.paragraphNumber == 'ASC'"> </span><span class="fa fa-angle-up" ng-if="params.sort.paragraphNumber == 'DESC'"> </span></th>
+                                                <th ng-click="sort('paragraphWordPosition')" style="cursor:pointer"> Position<span class="fa fa-angle-down" ng-if="params.sort.paragraphWordPosition == 'ASC'"> </span><span class="fa fa-angle-up" ng-if="params.sort.paragraphWordPosition == 'DESC'"> </span></th>
                                             </tr>
                                         </thead>
                                         <tbody>

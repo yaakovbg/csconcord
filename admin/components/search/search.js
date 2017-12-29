@@ -4,17 +4,17 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.maxSize = 5;
         $scope.numPerPage = 25;
         var initSearch = ($stateParams.search) ? $stateParams.search : '';
-        $scope.params = {page: 1, numPerPage: 25, sort: {"word":"ASC"}, search: initSearch};
-        $scope.articles=[];
-        $scope.groups=[];
-        $scope.articlesMap={};
+        $scope.params = {page: 1, numPerPage: 25, sort: {"word": "ASC"}, search: initSearch};
+        $scope.articles = [];
+        $scope.groups = [];
+        $scope.articlesMap = {};
         $scope.getFilterData = function () {
             canceller.resolve();
             canceller = $q.defer();
             $http({method: 'GET', url: '../server/articlesForFilter'}).
                     success(function (data, status, headers, config) {
                         $scope.articles = data;
-                        $scope.articles.forEach(function(article){
+                        $scope.articles.forEach(function (article) {
                             $scope.articlesMap[article.id] = article;
                         })
                     });
@@ -44,14 +44,22 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.$watch('params', function () {
             $scope.getData();
         }, true)
-        $scope.sort=function(columnName){
-            if($scope.params.sort && columnName in $scope.params.sort){
+        $scope.sort = function (columnName) {
+            if ($scope.params.sort && columnName in $scope.params.sort) {
                 var dir = $scope.params.sort[columnName];
-                var newDir=(dir === 'ASC')?'DESC':'ASC';
-                $scope.params.sort[columnName]=newDir;
-            }else{
-                 $scope.params.sort={};
-                 $scope.params.sort[columnName]='ASC';
+                if (dir === 'ASC') {
+                    var newDir = 'DESC';
+                    $scope.params.sort[columnName] = newDir;
+                } else {
+                    delete $scope.params.sort[columnName];
+                }
+
+            } else {
+                if (!('sort' in $scope.params)) {
+                    $scope.params.sort = {};
+                }
+
+                $scope.params.sort[columnName] = 'ASC';
             }
         }
     }]);

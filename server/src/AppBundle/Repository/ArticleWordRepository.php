@@ -123,7 +123,7 @@ class ArticleWordRepository extends BaseRepository {
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
-        $sortBy = (isset($params->sort) && $params->sort != '' && sizeof($params->sort) > 0) ? $params->sort : false;
+        $sortBy = (isset($params->sort) && $params->sort != '' && !(empty((array)$params->sort)) ) ? $params->sort : false;
         $where = '';
         $limit = '';
         $orderby = '';
@@ -131,6 +131,7 @@ class ArticleWordRepository extends BaseRepository {
         $join = "";
         $whereArray = [];
         if ($sortBy !== false) {
+            
             $orderstr = '';
             $count = 0;
             foreach ($sortBy as $k => $v) {
