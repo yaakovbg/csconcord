@@ -163,7 +163,25 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
 
  
 });
+function csvExport(data,fileName){
+	var csvContent = "data:text/csv;charset=utf-8,\ufeff";
+	data.forEach(function(infoArray, index){
+		var row=[];
+		infoArray.forEach(function(col){
+			row.push( col.replace(/["]/g, '""'));
+		})
+		dataString = '"'+row.join('","')+'"';
+                dataString = dataString.replace(/(\r\n|\n|\r)/gm,"");
+		csvContent += index < data.length ? dataString+ "\n" : dataString;
+	}); 
+	
+	var encodedUri = encodeURI(csvContent);
+	var link = document.createElement("a");
+	link.setAttribute("href", encodedUri);
+	link.setAttribute("download", fileName);
 
+	link.click(); // This will download the data file named "my_data.csv".
+}
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;

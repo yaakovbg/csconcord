@@ -34,6 +34,20 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
 
                     });
         }
+        $scope.exportSearch=function (){
+            var csvData=[];
+            $scope.articleWords.rows.forEach(function(row){
+               csvData.push([
+                   row.id,
+                   row.word,
+                   row.context,
+                   $scope.articlesMap[row.articleid].title,
+                   row.paragraphNumber,
+                   row.paragraphWordPosition
+               ]);
+            })
+            csvExport(csvData,"search.csv");
+        }
         $scope.searchf = function () {
             $scope.params.numPerPage = $scope.numPerPage;
             $scope.params.search = $scope.search;

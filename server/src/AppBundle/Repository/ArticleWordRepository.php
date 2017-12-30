@@ -252,7 +252,7 @@ class ArticleWordRepository extends BaseRepository {
             'ret' => 'fetch-assoc'
         ));
         $totalRows = $count['total_rows'];
-        $numOfPages = floor($totalRows / $numperpage);
+        $numOfPages = ($numperpage!==false)?floor($totalRows / $numperpage):0;
         $ret = array('rows' => $res, 'total_rows' => $totalRows, 'numberOfPages' => $numOfPages);
         return $ret;
     }

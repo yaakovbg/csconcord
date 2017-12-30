@@ -3,7 +3,7 @@ admin.controller('wordIndex', ['$rootScope', '$scope', '$state', '$http', 'userS
         var canceller = $q.defer();
         $scope.maxSize = 5;
         $scope.numPerPage = 25;
-        $scope.params = {page: 1, numPerPage: 25, order: {}, search: ''};
+        $scope.params = {page: 1, order: {}, search: ''};
         $scope.getData = function () {
               canceller.resolve();
                canceller = $q.defer();
@@ -15,7 +15,7 @@ admin.controller('wordIndex', ['$rootScope', '$scope', '$state', '$http', 'userS
                     });
         }
         $scope.searchf = function () {
-            $scope.params.numPerPage = $scope.numPerPage;
+            //$scope.params.numPerPage = $scope.numPerPage;
             $scope.params.search = $scope.search;
         }
         $scope.trustHtml = function (str) {
