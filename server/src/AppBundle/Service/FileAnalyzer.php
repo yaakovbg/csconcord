@@ -42,6 +42,7 @@ class FileAnalyzer {
         $this->manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", " ", $this->originalContent);
         $this->manipulatedContent = str_replace("\r\n\r\n", " ", $this->manipulatedContent);
         $this->manipulatedContent = str_replace("\n", " ", $this->manipulatedContent);
+        $this->manipulatedContent = str_replace("(\r\n|\n|\r)", " ", $this->manipulatedContent);
         $this->words = explode(" ", $this->manipulatedContent);
         $this->letters = str_split($this->originalContent);
 
@@ -64,6 +65,7 @@ class FileAnalyzer {
             $manipulatedContent = preg_replace("/[^[:alnum:][:space:]]/u", " ", $paragraph);
             $manipulatedContent = str_replace("\r\n\r\n", " ", $manipulatedContent);
             $manipulatedContent = str_replace("\n", " ", $manipulatedContent);
+            $manipulatedContent = preg_replace("/(\r\n|\n|\r)/", " ", $manipulatedContent);
             $wordsArr = explode(" ", $manipulatedContent);
 
             $paragraphPointer = 0;
