@@ -9,8 +9,7 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
         $scope.groups = [];
         $scope.articlesMap = {};
         $scope.getFilterData = function () {
-            canceller.resolve();
-            canceller = $q.defer();
+          
             $http({method: 'GET', url: '../server/articlesForFilter'}).
                     success(function (data, status, headers, config) {
                         $scope.articles = data;
@@ -49,8 +48,9 @@ admin.controller('search', ['$rootScope', '$scope', '$state', '$http', 'userServ
             csvExport(csvData,"search.csv");
         }
         $scope.searchf = function () {
-            $scope.params.numPerPage = $scope.numPerPage;
-            $scope.params.search = $scope.search;
+            $scope.getData();
+           // $scope.params.numPerPage = $scope.numPerPage;
+           // $scope.params.search = $scope.search;
         }
         $scope.trustHtml = function (str) {
             return $sce.trustAsHtml(str);

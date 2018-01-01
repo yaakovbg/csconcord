@@ -96,7 +96,7 @@ class FileAnalyzer {
                          }
                     }
                        
-                    $wordContext = str_replace($word, '<b>' . $word . '</b>', $wordContext);
+                    $wordContext = preg_replace("/\b$word\b/", '<b>' . $word . '</b>', $wordContext);
                     $paragraphNumber = $paragraphsData->getParagraphNumber();
                     $artilceWord = new ArticleWord((object) array('word' => $word, 'position' => $newpos, 'context' => $wordContext, 'wordPosition' => $wordPosition, 'paragraphWordPosition' => $wordcount, 'articleid' => $this->articleId, 'paragraphNumber' => $paragraphNumber));
                     $wordcount++;

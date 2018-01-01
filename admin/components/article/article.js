@@ -7,7 +7,7 @@ admin.controller('article', ['$rootScope', '$scope', '$state', '$http', 'userSer
                         $scope.articleData = data;
                         if ($scope.search && $scope.search !== '') {
                             var find = $scope.search;
-                            var re = new RegExp(find, 'g');
+                            var re = new RegExp('\\b'+find+'\\b', 'g');
 
                             $scope.articleData.fileContent = $scope.articleData.fileContent.replace(re, '<span class="search-word">' + decodeURIComponent($scope.search) + '</span>');
                            

@@ -16,33 +16,36 @@ use FOS\RestBundle\View\View;
 use AppBundle\Repository\ArticleRepository;
 use AppBundle\Entity\ArticleWord;
 
-
 class StatisticsController extends FOSRestController {
 
     /**
-     * @Rest\Get("/wordStatistics")
+     * @Rest\Post("/wordStatistics")
      */
-    public function getWordStatistics() {
+    public function getWordStatistics(Request $request) {
+        $data = json_decode($request->getContent());
         $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
-        $ret=$articleWordrepo->getWordStatistics();
+        $ret = $articleWordrepo->getWordStatistics($data);
         return $ret;
     }
+
     /**
-     * @Rest\Get("/letterStatistics")
+     * @Rest\Post("/letterStatistics")
      */
-    public function getLetterStatistics() {
+    public function getLetterStatistics(Request $request) {
+        $data = json_decode($request->getContent());
         $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
-        $ret=$articleWordrepo->getLetterStatistics();
+        $ret = $articleWordrepo->getLetterStatistics($data);
         return $ret;
     }
- /**
-     * @Rest\Get("/wordOcuranceStatistics")
+
+    /**
+     * @Rest\Post("/wordOcuranceStatistics")
      */
-    public function getWordOcuranceStatistics() {
+    public function getWordOcuranceStatistics(Request $request) {
+        $data = json_decode($request->getContent());
         $articleWordrepo = $this->getDoctrine()->getRepository(ArticleWord::class);
-        $ret=$articleWordrepo->getWordOcuranceStatistics();
+        $ret = $articleWordrepo->getWordOcuranceStatistics($data);
         return $ret;
     }
-    
 
 }

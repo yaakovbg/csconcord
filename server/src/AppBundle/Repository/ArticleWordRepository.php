@@ -123,7 +123,7 @@ class ArticleWordRepository extends BaseRepository {
         $numperpage = (isset($params->numPerPage) && $params->numPerPage != '') ? $params->numPerPage : false;
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
-        $sortBy = (isset($params->sort) && $params->sort != '' && !(empty((array)$params->sort)) ) ? $params->sort : false;
+        $sortBy = (isset($params->sort) && $params->sort != '' && !(empty((array) $params->sort)) ) ? $params->sort : false;
         $where = '';
         $limit = '';
         $orderby = '';
@@ -131,19 +131,19 @@ class ArticleWordRepository extends BaseRepository {
         $join = "";
         $whereArray = [];
         if ($sortBy !== false) {
-            
+
             $orderstr = '';
             $count = 0;
             foreach ($sortBy as $k => $v) {
                 if ($orderstr !== '') {
                     $orderstr .= ',';
                 }
-                $orderstr.=" $k $v";
+                $orderstr .= " $k $v";
                 //$orderstr .= " :orderby$count :orderbydir$count ";
                 //$paramArr["orderby$count"] = $k;
                 //$paramArr["orderbydir$count"] = $v;
             }
-            $orderby = ' order by '.$orderstr;
+            $orderby = ' order by ' . $orderstr;
 //             $orderby  = ' order 
             //print_r($sortBy);
 //             $orderby  = ' order by :orderby :orderdir';
@@ -192,7 +192,7 @@ class ArticleWordRepository extends BaseRepository {
             $start = ($page - 1) * $numperpage;
             $limit = "limit $start,$numperpage";
         }
-        
+
         $res = $this->smartQuery(array(
             'sql' => "select distinct articleword.* FROM `articleword` $join $where $orderby $limit",
             'par' => $paramArr,
@@ -204,23 +204,10 @@ class ArticleWordRepository extends BaseRepository {
             'ret' => 'fetch-assoc'
         ));
         $totalRows = $count['total_rows'];
-         $numOfPages = ($numperpage!==false)?floor($totalRows / $numperpage):0;
+        $numOfPages = ($numperpage !== false) ? floor($totalRows / $numperpage) : 0;
         //$numOfPages = floor($totalRows / $numperpage);
         $ret = array('rows' => $res, 'total_rows' => $totalRows, 'numberOfPages' => $numOfPages);
         return $ret;
-    }
-
-    /**
-     * 
-     * @return mixed statistics on words
-     */
-    public function getWordStatistics() {
-        $statistics = $this->smartQuery(array(
-            'sql' => "select word,count(word) as word_count from articleword group by word ;",
-            'par' => array(),
-            'ret' => 'all'
-        ));
-        return $statistics;
     }
 
     /**
@@ -253,7 +240,7 @@ class ArticleWordRepository extends BaseRepository {
             'ret' => 'fetch-assoc'
         ));
         $totalRows = $count['total_rows'];
-        $numOfPages = ($numperpage!==false)?floor($totalRows / $numperpage):0;
+        $numOfPages = ($numperpage !== false) ? floor($totalRows / $numperpage) : 0;
         $ret = array('rows' => $res, 'total_rows' => $totalRows, 'numberOfPages' => $numOfPages);
         return $ret;
     }
@@ -262,7 +249,94 @@ class ArticleWordRepository extends BaseRepository {
      * 
      * @return mixed statistics on words
      */
-    public function getWordOcuranceStatistics() {
+    public function getWordStatistics($params) {        
+        $paramArr = array();
+        $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
+        $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        $where = '';
+        $join = "";
+        $whereArray = [];
+        if ($articlesFilter !== false) {
+            $articlesSigns = "";
+            $arcount = 1;
+            foreach ($articlesFilter as $article) {
+
+                if ($arcount > 1)
+                    $articlesSigns .= ",";
+                $articlesSigns .= ":ar" . $arcount;
+                $paramArr["ar" . $arcount] = $article->id;
+                $arcount++;
+            }
+            $whereArticles = "articleword.articleid in ($articlesSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
+        if ($groupsFilter !== false) {
+            $join .= " left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $groupsSigns = "";
+            $grcount = 1;
+            foreach ($groupsFilter as $group) {
+
+                if ($grcount > 1)
+                    $groupsSigns .= ",";
+                $groupsSigns .= ":gr" . $grcount;
+                $paramArr["gr" . $grcount] = $group->id;
+                $grcount++;
+            }
+            $whereArticles = "`articlewordgroup`.wgid in ($groupsSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
+        if (sizeof($whereArray) > 0) {
+            $where = "where " . implode(" and ", $whereArray);
+        }
+        
+        $statistics = $this->smartQuery(array(
+            'sql' => "select articleword.word,count(articleword.word) as word_count from articleword $join $where group by articleword.word ;",
+            'par' => $paramArr,
+            'ret' => 'all'
+        ));
+        return $statistics;
+    }
+
+    /**
+     * 
+     * @return mixed statistics on words
+     */
+    public function getWordOcuranceStatistics($data) {
+        $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
+        $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        if ($articlesFilter !== false) {
+            $articlesSigns = "";
+            $arcount = 1;
+            foreach ($articlesFilter as $article) {
+
+                if ($arcount > 1)
+                    $articlesSigns .= ",";
+                $articlesSigns .= ":ar" . $arcount;
+                $paramArr["ar" . $arcount] = $article->id;
+                $arcount++;
+            }
+            $whereArticles = "articleid in ($articlesSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
+        if ($groupsFilter !== false) {
+            $join .= " left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $groupsSigns = "";
+            $grcount = 1;
+            foreach ($groupsFilter as $group) {
+
+                if ($grcount > 1)
+                    $groupsSigns .= ",";
+                $groupsSigns .= ":gr" . $grcount;
+                $paramArr["gr" . $grcount] = $group->id;
+                $grcount++;
+            }
+            $whereArticles = "`articlewordgroup`.wgid in ($groupsSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
         $statistics = $this->smartQuery(array(
             'sql' => "select a.word_count,count(a.word_count) as numOfWords from (select word,count(word) as word_count from articleword group by word)as a group by a.word_count;",
             'par' => array(),
@@ -276,6 +350,39 @@ class ArticleWordRepository extends BaseRepository {
      * @return mixed statistics on letters
      */
     public function getLetterStatistics() {
+        $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
+        $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        if ($articlesFilter !== false) {
+            $articlesSigns = "";
+            $arcount = 1;
+            foreach ($articlesFilter as $article) {
+
+                if ($arcount > 1)
+                    $articlesSigns .= ",";
+                $articlesSigns .= ":ar" . $arcount;
+                $paramArr["ar" . $arcount] = $article->id;
+                $arcount++;
+            }
+            $whereArticles = "articleid in ($articlesSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
+        if ($groupsFilter !== false) {
+            $join .= " left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $groupsSigns = "";
+            $grcount = 1;
+            foreach ($groupsFilter as $group) {
+
+                if ($grcount > 1)
+                    $groupsSigns .= ",";
+                $groupsSigns .= ":gr" . $grcount;
+                $paramArr["gr" . $grcount] = $group->id;
+                $grcount++;
+            }
+            $whereArticles = "`articlewordgroup`.wgid in ($groupsSigns)";
+
+            $whereArray[] = $whereArticles;
+        }
         $statistics = $this->smartQuery(array(
             'sql' => "select letter,count(letter) as letter_count from articleletter group by (BINARY letter ) ",
             'par' => array(),
