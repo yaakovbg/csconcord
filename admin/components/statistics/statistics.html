@@ -52,6 +52,7 @@
                             <ul class="nav nav-tabs" ng-init="activeTab = (activeTab) ? activeTab : 'word'"> 
                                 <li ng-class="{'active':(activeTab == 'word')}"><a type="button"  href="" ng-click="activeTab = 'word'" data-toggle="tab">By word</a> </li>
                                 <li ng-class="{'active':(activeTab == 'wordOccurance')}"><a type="button" href="" ng-click="activeTab = 'wordOccurance'" data-toggle="tab">Frequency</a> </li> 
+                                <li ng-class="{'active':(activeTab == 'letterStatistics')}"><a type="button" href="" ng-click="activeTab = 'letterStatistics'" data-toggle="tab">By Letter</a> </li> 
 
                             </ul>
                             <div ng-show="activeTab == 'word'" class="tab-content"> 
@@ -118,7 +119,7 @@
                                             <tr   ng-repeat="data in letterStatistics" style="cursor: pointer;">
                                                 <td >{{data.letter_count}}</td>
 
-                                                <td >{{data.letter}}</td>
+                                                <td ng-bind-html="data.letter"></td>
                                               
                                             </tr>
                                         </tbody>

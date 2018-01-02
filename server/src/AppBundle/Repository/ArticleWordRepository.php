@@ -249,7 +249,7 @@ class ArticleWordRepository extends BaseRepository {
      * 
      * @return mixed statistics on words
      */
-    public function getWordStatistics($params) {        
+    public function getWordStatistics($params) {
         $paramArr = array();
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
@@ -290,7 +290,7 @@ class ArticleWordRepository extends BaseRepository {
         if (sizeof($whereArray) > 0) {
             $where = "where " . implode(" and ", $whereArray);
         }
-        
+
         $statistics = $this->smartQuery(array(
             'sql' => "select articleword.word,count(articleword.word) as word_count from articleword $join $where group by articleword.word ;",
             'par' => $paramArr,
@@ -303,9 +303,13 @@ class ArticleWordRepository extends BaseRepository {
      * 
      * @return mixed statistics on words
      */
-    public function getWordOcuranceStatistics($data) {
+    public function getWordOcuranceStatistics($params) {
+        $paramArr = array();
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        $where = '';
+        $join = "";
+        $whereArray = [];
         if ($articlesFilter !== false) {
             $articlesSigns = "";
             $arcount = 1;
@@ -317,7 +321,7 @@ class ArticleWordRepository extends BaseRepository {
                 $paramArr["ar" . $arcount] = $article->id;
                 $arcount++;
             }
-            $whereArticles = "articleid in ($articlesSigns)";
+            $whereArticles = "articleword.articleid in ($articlesSigns)";
 
             $whereArray[] = $whereArticles;
         }
@@ -337,9 +341,12 @@ class ArticleWordRepository extends BaseRepository {
 
             $whereArray[] = $whereArticles;
         }
+        if (sizeof($whereArray) > 0) {
+            $where = "where " . implode(" and ", $whereArray);
+        }
         $statistics = $this->smartQuery(array(
-            'sql' => "select a.word_count,count(a.word_count) as numOfWords from (select word,count(word) as word_count from articleword group by word)as a group by a.word_count;",
-            'par' => array(),
+            'sql' => "select a.word_count,count(a.word_count) as numOfWords from (select articleword.word,count(articleword.word) as word_count from articleword $join $where group by articleword.word)as a group by a.word_count;",
+            'par' => $paramArr,
             'ret' => 'all'
         ));
         return $statistics;
@@ -349,9 +356,13 @@ class ArticleWordRepository extends BaseRepository {
      * 
      * @return mixed statistics on letters
      */
-    public function getLetterStatistics() {
+    public function getLetterStatistics($params) {
+        $paramArr = array();
         $articlesFilter = (isset($params->chosenArticles) && $params->chosenArticles != '' && sizeof($params->chosenArticles) > 0 ) ? $params->chosenArticles : false;
         $groupsFilter = (isset($params->chosenGroups) && $params->chosenGroups != '' && sizeof($params->chosenGroups) > 0 ) ? $params->chosenGroups : false;
+        $where = '';
+        $join = "";
+        $whereArray = [];
         if ($articlesFilter !== false) {
             $articlesSigns = "";
             $arcount = 1;
@@ -363,12 +374,12 @@ class ArticleWordRepository extends BaseRepository {
                 $paramArr["ar" . $arcount] = $article->id;
                 $arcount++;
             }
-            $whereArticles = "articleid in ($articlesSigns)";
+            $whereArticles = "articleletter.articleid in ($articlesSigns)";
 
             $whereArray[] = $whereArticles;
         }
         if ($groupsFilter !== false) {
-            $join .= " left join `articlewordgroup` on(`articleword`.word=`articlewordgroup`.word) ";
+            $join .= " join articleword on(articleletter.articleid = articleword.articleid and articleletter.position >= articleword.position and articleletter.position<(articleword.position+CHAR_LENGTH(articleword.word))) join articlewordgroup on (articleword.word = articlewordgroup.word) ";
             $groupsSigns = "";
             $grcount = 1;
             foreach ($groupsFilter as $group) {
@@ -383,9 +394,12 @@ class ArticleWordRepository extends BaseRepository {
 
             $whereArray[] = $whereArticles;
         }
+        if (sizeof($whereArray) > 0) {
+            $where = "where " . implode(" and ", $whereArray);
+        }
         $statistics = $this->smartQuery(array(
-            'sql' => "select letter,count(letter) as letter_count from articleletter group by (BINARY letter ) ",
-            'par' => array(),
+            'sql' => "select articleletter.letter,count(articleletter.letter) as letter_count from articleletter $join $where group by (BINARY articleletter.letter ) ",
+            'par' => $paramArr,
             'ret' => 'all'
         ));
         return $statistics;

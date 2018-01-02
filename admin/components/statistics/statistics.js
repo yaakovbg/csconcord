@@ -6,9 +6,7 @@ admin.controller('statistics', ['$rootScope', '$scope', '$state', '$http', 'user
             $http({method: 'GET', url: '../server/articlesForFilter'}).
                     success(function (data, status, headers, config) {
                         $scope.articles = data;
-                        $scope.articles.forEach(function (article) {
-                            $scope.articlesMap[article.id] = article;
-                        })
+                       
                     });
             $http({method: 'GET', url: '../server/wordGroupsForFilter'}).
                     success(function (data, status, headers, config) {

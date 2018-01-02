@@ -124,6 +124,15 @@ admin.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
                 }
             }
         })
+        .state("export", {
+            url: "/export",
+            views: {
+                "main": {
+                    templateUrl: "components/export/export.html",
+                    controller: "export"
+                }
+            }
+        })
 	
 	var counter=0;
 	$httpProvider.interceptors.push(function($document,$rootScope) {
